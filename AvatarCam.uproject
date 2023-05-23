@@ -7,7 +7,10 @@
 		{
 			"Name": "AvatarCam",
 			"Type": "Runtime",
-			"LoadingPhase": "Default"
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"Engine"
+			]
 		}
 	],
 	"Plugins": [
@@ -17,6 +20,18 @@
 			"TargetAllowList": [
 				"Editor"
 			]
+		},
+		{
+			"Name": "MyPluging",
+			"Enabled": false
+		},
+		{
+			"Name": "OpenCVCustomized",
+			"Enabled": false
+		},
+		{
+			"Name": "OpenCV",
+			"Enabled": true
 		}
 	]
 }

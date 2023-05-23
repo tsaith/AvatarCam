@@ -8,6 +8,17 @@ public class AvatarCam : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay", "EnhancedInput" });
+		PublicDependencyModuleNames.AddRange(new string[] {
+			"Core", "CoreUObject", "Engine", "InputCore",
+			"HeadMountedDisplay", "EnhancedInput",
+		    "OpenCV", "OpenCVHelper" 
+		});
+
+		PrivateDependencyModuleNames.AddRange(new string[] {
+			"Core", "CoreUObject", "Engine", "InputCore",
+			"HeadMountedDisplay", "EnhancedInput",
+		    "OpenCV", "OpenCVHelper", 
+			//"OpenCVCustomized" 
+		});
 	}
 }

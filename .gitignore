@@ -71,10 +71,12 @@ bin/
 # Unreal
 Binaries/
 Intermediate/
-Saved/
+#Saved/
 Plugins/
-ThirdParty
-Libs/
+Saved/
+#ThirdParty
+#Libs/
+__ExternalActors__/
 
 # Outputs
 *.out
