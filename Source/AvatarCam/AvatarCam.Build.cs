@@ -1,5 +1,8 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
+//using Tools.DotNETCommon;
+using System;
+using System.IO;
 using UnrealBuildTool;
 
 public class AvatarCam : ModuleRules
@@ -11,14 +14,24 @@ public class AvatarCam : ModuleRules
 		PublicDependencyModuleNames.AddRange(new string[] {
 			"Core", "CoreUObject", "Engine", "InputCore",
 			"HeadMountedDisplay", "EnhancedInput",
-		    "OpenCV", "OpenCVHelper" 
+			//"MocapMp",
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {
 			"Core", "CoreUObject", "Engine", "InputCore",
 			"HeadMountedDisplay", "EnhancedInput",
 		    "OpenCV", "OpenCVHelper", 
-			//"OpenCVCustomized" 
+			//"MocapMp",
 		});
+
+        // Load libmocap_mp.dll
+        string DLLName = "libmocap_mp.dll";
+		string ProjectDirectory = Path.Combine(ModuleDirectory, "..\\..\\");
+		string DLLPath = Path.Combine(ProjectDirectory, "Libs", DLLName);
+		//Console.WriteLine("DllPath: {0}", DLLPath);
+
+		PublicDelayLoadDLLs.Add(DLLName);
+        RuntimeDependencies.Add(DLLPath);
+
 	}
 }

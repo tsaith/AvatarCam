@@ -32,6 +32,14 @@
 		{
 			"Name": "OpenCV",
 			"Enabled": true
+		},
+		{
+			"Name": "MocapMp",
+			"Enabled": false
 		}
+	],
+	"TargetPlatforms": [
+		"Windows",
+		"HoloLens"
 	]
 }
