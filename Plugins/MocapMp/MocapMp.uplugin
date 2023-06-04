@@ -2,8 +2,8 @@
 	"FileVersion": 3,
 	"Version": 1,
 	"VersionName": "1.0",
-	"FriendlyName": "OpenCVCustomized",
-	"Description": "Customized OpenCV plugin",
+	"FriendlyName": "MocapMp",
+	"Description": "Mocap based on Mediapipe",
 	"Category": "Other",
 	"CreatedBy": "Andrew",
 	"CreatedByURL": "",
@@ -16,9 +16,15 @@
 	"Installed": false,
 	"Modules": [
 		{
-			"Name": "OpenCVCustomized",
+			"Name": "MocapMp",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "OpenCV",
+			"Enabled": true
 		}
 	]
 }

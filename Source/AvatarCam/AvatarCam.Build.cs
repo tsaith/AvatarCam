@@ -14,14 +14,13 @@ public class AvatarCam : ModuleRules
 		PublicDependencyModuleNames.AddRange(new string[] {
 			"Core", "CoreUObject", "Engine", "InputCore",
 			"HeadMountedDisplay", "EnhancedInput",
-			//"MocapMp",
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {
 			"Core", "CoreUObject", "Engine", "InputCore",
 			"HeadMountedDisplay", "EnhancedInput",
-		    "OpenCV", "OpenCVHelper", 
-			//"MocapMp",
+		    "OpenCV", "OpenCVHelper",
+			"VideoReader",
 		});
 
         // Load libmocap_mp.dll

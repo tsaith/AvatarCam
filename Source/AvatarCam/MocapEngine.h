@@ -11,6 +11,7 @@
 
 #include "MocapMpProxy.h"
 
+#include "Math/UnrealMathUtility.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "MocapEngine.generated.h"
@@ -23,6 +24,33 @@ class AVATARCAM_API AMocapEngine : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AMocapEngine();
+	~AMocapEngine();
+
+	void Process();
+
+	void ConvertDataToImage(cv::Mat& image, TArray<FColor>& data);
+	void RadianToDegree(float Radian, float& Degree);
+	void DegreeToRadian(float Degree, float& Radian);
+	void MakeAngleAxis(float Angle, FVector Axis, FVector4& AngleAxis);
+	void QuatToAngleAxis(FQuat Quat, FVector4& AngleAxis);
+
+	void PrintMessage(FString msg);
+	void PrintFloat(FString msg, float v);
+	void PrintVector(FString msg, FVector v);
+	void PrintQuat(FString msg, FQuat q);
+
+
+
+	// Parameters
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "MocapEngine")
+		int CameraID = 0;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "MocapEngine")
+		int ImageWidth = 640;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "MocapEngine")
+		int ImageHeight = 480;
+
 
 protected:
 	// Called when the game starts or when spawned
@@ -34,7 +62,9 @@ public:
 
 
 private:
-
+ 
+	cv::VideoCapture mCap;
+	cv::Mat mFrame;
 	cv::Mat mImage;
 	TArray<FColor> mData;
 
