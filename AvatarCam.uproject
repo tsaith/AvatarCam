@@ -36,6 +36,10 @@
 		{
 			"Name": "MocapMp",
 			"Enabled": false
+		},
+		{
+			"Name": "VideoReader",
+			"Enabled": false
 		}
 	],
 	"TargetPlatforms": [

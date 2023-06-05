@@ -26,7 +26,219 @@ public:
 	AMocapEngine();
 	~AMocapEngine();
 
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
 	void Process();
+	//void EstimateSkeleton();
+	//void UpdateLocomotion();
+	//void Diagnostic();
+	
+
+	// Parameters
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = MocapEngine)
+		int CameraID = 0;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "MocapEngine")
+		int ImageWidth = 640;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "MocapEngine")
+		int ImageHeight = 480;
+
+	// Methods
+	UFUNCTION(BlueprintCallable, Category = "MocapEngine")
+		void SetImageData(TArray<FColor> data);
+
+	UFUNCTION(BlueprintCallable, Category = "MocapEngine")
+		void Calibrate();
+
+	UFUNCTION(BlueprintCallable, Category = "MocapEngine")
+		void SetEngineName(FString engineName);
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		FString GetEngineName();
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		void GetBones(TArray<FVector>& Bones);
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		void GetQuats(TArray<FQuat>& Quats);
+
+	/*
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		int GetIPelvis();
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		int GetISpine01();
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		int GetISpine02();
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		int GetISpine03();
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		int GetINeck01();
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		int GetIHead();
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		int GetIClavicleL();
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		int GetIUpperarmL();
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		int GetILowerarmL();
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		int GetIHandL();
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		int GetIClavicleR();
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		int GetIUpperarmR();
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		int GetILowerarmR();
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		int GetIHandR();
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		int GetIThighL();
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		int GetICalfL();
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		int GetIFootL();
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		int GetIBallL();
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		int GetIThighR();
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		int GetICalfR();
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		int GetIFootR();
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		int GetIBallR();
+
+	// Left fingers
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		int GetIThumb01L();
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		int GetIThumb02L();
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		int GetIThumb03L();
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		int GetIIndex01L();
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		int GetIIndex02L();
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		int GetIIndex03L();
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		int GetIMiddle01L();
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		int GetIMiddle02L();
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		int GetIMiddle03L();
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		int GetIRing01L();
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		int GetIRing02L();
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		int GetIRing03L();
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		int GetIPinky01L();
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		int GetIPinky02L();
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		int GetIPinky03L();
+
+	// Right fingers
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		int GetIThumb01R();
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		int GetIThumb02R();
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		int GetIThumb03R();
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		int GetIIndex01R();
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		int GetIIndex02R();
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		int GetIIndex03R();
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		int GetIMiddle01R();
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		int GetIMiddle02R();
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		int GetIMiddle03R();
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		int GetIRing01R();
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		int GetIRing02R();
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		int GetIRing03R();
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		int GetIPinky01R();
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		int GetIPinky02R();
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		int GetIPinky03R();
+
+	// Facial expression
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		TArray<float> GetFacialCtrlParams();
+
+	// Gestures
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		FString GetLeftStaticGesture();
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		FString GetRightStaticGesture();
+
+	// Locomotion
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		bool IsSquat();
+	*/
+
 
 	void ConvertDataToImage(cv::Mat& image, TArray<FColor>& data);
 	void RadianToDegree(float Radian, float& Degree);
@@ -39,27 +251,9 @@ public:
 	void PrintVector(FString msg, FVector v);
 	void PrintQuat(FString msg, FQuat q);
 
-
-
-	// Parameters
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "MocapEngine")
-		int CameraID = 0;
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "MocapEngine")
-		int ImageWidth = 640;
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "MocapEngine")
-		int ImageHeight = 480;
-
-
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
 
 private:
  

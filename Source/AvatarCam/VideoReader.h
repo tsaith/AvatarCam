@@ -6,20 +6,20 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "VideoReaderActor.generated.h"
+#include "VideoReader.generated.h"
 
-UCLASS(Blueprintable)
-class VIDEOREADER_API AVideoReaderActor : public AActor
+UCLASS()
+class AVATARCAM_API AVideoReader : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AVideoReaderActor();
+	AVideoReader();
 
     void UpdateImageData();
 
-    UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = VideoReader)
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "VideoReader")
         int ImageWidth = 640;
 
     UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = VideoReader)
@@ -32,10 +32,6 @@ public:
     UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = VideoReader)
         bool AsVideoReader = true;
 
-    //The video filename
-    UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = VideoReader)
-        FString VideoFilename = "video.mp4";
-
     //Enable reading video
     UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = VideoReader)
         bool AsCameraReader = false;
@@ -43,6 +39,10 @@ public:
     //Enable reading image
     UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = VideoReader)
         bool AsImageReader = false;
+
+    //The video filename
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = VideoReader)
+        FString VideoFilename = "video.mp4";
 
     // The device ID opened by the Video Stream
     UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = VideoReader)
@@ -63,7 +63,6 @@ public:
     // The current video frame's corresponding texture
     UPROPERTY(BlueprintReadOnly, Category = VideoReader)
         UTexture2D* VideoTexture;
-
 
 protected:
 	// Called when the game starts or when spawned
@@ -86,5 +85,4 @@ private:
     FString mImagePath;
 
     cv::Mat mImage;
-
 };

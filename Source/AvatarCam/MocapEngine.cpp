@@ -49,12 +49,9 @@ void AMocapEngine::BeginPlay()
 {
 	Super::BeginPlay();
 
-	mCap = cv::VideoCapture(0);
-	if (!mCap.isOpened()) {
-		UE_LOG(LogTemp, Warning, TEXT("Failed to open the webcam."));
-	}
-
 	mImage = cv::Mat(ImageHeight, ImageWidth, CV_8UC3, cv::Scalar(0, 0, 0));
+	mData.Init(FColor(0, 0, 0, 255), mImage.cols * mImage.rows);
+
 }
 
 // Called every frame
@@ -93,6 +90,32 @@ void AMocapEngine::Process() {
 	}
 }
 
+void AMocapEngine::SetImageData(TArray<FColor> data) {
+	mData = data;
+}
+
+void AMocapEngine::Calibrate() {
+	mMocap.Calibrate();
+}
+
+void AMocapEngine::SetEngineName(FString engineName) {
+	mEngineName = engineName;
+}
+
+FString AMocapEngine::GetEngineName() {
+	return mEngineName;
+}
+
+
+void AMocapEngine::GetBones(TArray<FVector>& Bones) {
+	Bones = mBones;
+}
+
+void AMocapEngine::GetQuats(TArray<FQuat>& Quats) {
+	Quats = mQuats;
+}
+
+
 void AMocapEngine::ConvertDataToImage(cv::Mat& image, TArray<FColor>& data) {
 
 	uchar* p = image.data;
@@ -101,6 +124,7 @@ void AMocapEngine::ConvertDataToImage(cv::Mat& image, TArray<FColor>& data) {
 	int m = 0;
 	for (int i = 0; i < ImageHeight; i++) {
 		for (int j = 0; j < ImageWidth; j++) {
+
 			k = i * ImageWidth * 3 + j * 3;
 			m = i * ImageWidth + j;
 			p[k] = data[m].B;

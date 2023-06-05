@@ -55,6 +55,14 @@ void AVideoReaderActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	UE_LOG(LogTemp, Warning, TEXT("tick!."));
+	cv::Mat frame;
+	if (AsVideoReader || AsCameraReader) {
+        mVideoReader.Read(frame);
+        cv::resize(frame, mImage, cv::Size(ImageWidth, ImageHeight));
+		cv::imshow("win", mImage);
+		cv::waitKey(5);
+	}
 }
 
 void AVideoReaderActor::UpdateImageData()
