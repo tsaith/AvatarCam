@@ -50,7 +50,7 @@ void AMocapEngine::BeginPlay()
 	Super::BeginPlay();
 
 	mImage = cv::Mat(ImageHeight, ImageWidth, CV_8UC3, cv::Scalar(0, 0, 0));
-	mData.Init(FColor(0, 0, 0, 255), mImage.cols * mImage.rows);
+	mData.Init(FColor(0, 0, 0, 255), ImageWidth*ImageHeight);
 
 }
 
@@ -59,6 +59,7 @@ void AMocapEngine::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	UPrintBPLibrary::PrintMessage("hi");
 	Process();
 }
 
@@ -74,32 +75,47 @@ void AMocapEngine::Process() {
 	// Motion capture 
 	if (mCanLoadMocapLibrary) {
 
-		/*
+	    //UPrintBPLibrary::PrintInt("Width: ", ImageWidth);
+	    //UPrintBPLibrary::PrintInt("Height: ", ImageHeight);
+		bool bIsEmpty = mImage.empty();
+	    //UPrintBPLibrary::PrintBool("is empty: ", bIsEmpty);
 		// Image 
-		bool ret = mCap.read(mFrame);
-		cv::resize(mFrame, mImage, cv::Size(ImageWidth, ImageHeight));
-		imshow("win", mImage);
+		ConvertDataToImage(mData, mImage);
+
+		//std::string imagePath = "C:\\Users\\andrew\\projects\\AvatarCam\\Outputs\\image.jpg";
+		//cv::imwrite(imagePath, mImage);
+
+		//cv::imshow("win", mImage);
+
+		//resize(mImage, imageDebug, cv::Size(320, 240));
+		//cv::imshow("Original", imageDebug);
+
+
 
 		// Detection
 		mMocap.Detect(mImage);
-		*/
 
 		// Perform diagnostics 
-		//Diagnostic();
+		Diagnostic();
 
 	}
 }
 
-void AMocapEngine::SetImageData(TArray<FColor> data) {
-	mData = data;
+void AMocapEngine::Diagnostic() {
+
+}
+
+
+void AMocapEngine::SetImageData(TArray<FColor> Data) {
+	mData = Data;
 }
 
 void AMocapEngine::Calibrate() {
 	mMocap.Calibrate();
 }
 
-void AMocapEngine::SetEngineName(FString engineName) {
-	mEngineName = engineName;
+void AMocapEngine::SetEngineName(FString EngineName) {
+	mEngineName = EngineName;
 }
 
 FString AMocapEngine::GetEngineName() {
@@ -116,20 +132,23 @@ void AMocapEngine::GetQuats(TArray<FQuat>& Quats) {
 }
 
 
-void AMocapEngine::ConvertDataToImage(cv::Mat& image, TArray<FColor>& data) {
+void AMocapEngine::ConvertDataToImage(TArray<FColor>& Data, cv::Mat& Image) {
 
-	uchar* p = image.data;
+	uchar* p = Image.data;
+	const int numChannels = 3;
 
 	int k = 0;
 	int m = 0;
 	for (int i = 0; i < ImageHeight; i++) {
 		for (int j = 0; j < ImageWidth; j++) {
 
-			k = i * ImageWidth * 3 + j * 3;
+			k = i * ImageWidth * numChannels + j * numChannels;
 			m = i * ImageWidth + j;
-			p[k] = data[m].B;
-			p[k + 1] = data[m].G;
-			p[k + 2] = data[m].R;
+
+			p[k] = Data[m].B;
+			p[k + 1] = Data[m].G;
+			p[k + 2] = Data[m].R;
+
 		}
 	}
 
@@ -168,39 +187,6 @@ void AMocapEngine::QuatToAngleAxis(FQuat Quat, FVector4& AngleAxis)
 	float angleDeg;
 	RadianToDegree(angleRad, angleDeg);
 	MakeAngleAxis(angleDeg, axis, AngleAxis);
-
-}
-
-void AMocapEngine::PrintMessage(FString msg) {
-	UE_LOG(LogTemp, Warning, TEXT("%s"), *msg);
-}
-
-void AMocapEngine::PrintFloat(FString msg, float v) {
-
-	FString s = FString::SanitizeFloat(v);
-
-	msg += s;
-	PrintMessage(msg);
-
-}
-
-void AMocapEngine::PrintVector(FString msg, FVector v) {
-
-	FString s = FString::SanitizeFloat(v.X) + ", " +
-		FString::SanitizeFloat(v.Y) + ", " + FString::SanitizeFloat(v.Z);
-
-	msg += s;
-	PrintMessage(msg);
-
-}
-
-void AMocapEngine::PrintQuat(FString msg, FQuat q) {
-
-	FString s = FString::SanitizeFloat(q.W) + ", " + FString::SanitizeFloat(q.X) + ", " +
-		FString::SanitizeFloat(q.Y) + +", " + FString::SanitizeFloat(q.Z);
-
-	msg += s;
-	PrintMessage(msg);
 
 }
 

@@ -79,6 +79,7 @@ Saved/
 __ExternalActors__/
 
 # Outputs
+Outputs/
 *.out
 
 # Visual Studio

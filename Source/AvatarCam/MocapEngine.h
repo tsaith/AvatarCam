@@ -10,6 +10,7 @@
 #include "PostOpenCVHeaders.h"
 
 #include "MocapMpProxy.h"
+#include "PrintBPLibrary.h"
 
 #include "Math/UnrealMathUtility.h"
 #include "CoreMinimal.h"
@@ -32,7 +33,7 @@ public:
 	void Process();
 	//void EstimateSkeleton();
 	//void UpdateLocomotion();
-	//void Diagnostic();
+	void Diagnostic();
 	
 
 	// Parameters
@@ -47,13 +48,13 @@ public:
 
 	// Methods
 	UFUNCTION(BlueprintCallable, Category = "MocapEngine")
-		void SetImageData(TArray<FColor> data);
+		void SetImageData(TArray<FColor> Data);
 
 	UFUNCTION(BlueprintCallable, Category = "MocapEngine")
 		void Calibrate();
 
 	UFUNCTION(BlueprintCallable, Category = "MocapEngine")
-		void SetEngineName(FString engineName);
+		void SetEngineName(FString EngineName);
 
 	UFUNCTION(BlueprintPure, Category = "MocapEngine")
 		FString GetEngineName();
@@ -239,17 +240,11 @@ public:
 		bool IsSquat();
 	*/
 
-
-	void ConvertDataToImage(cv::Mat& image, TArray<FColor>& data);
+	void ConvertDataToImage(TArray<FColor>& Data, cv::Mat& Image);
 	void RadianToDegree(float Radian, float& Degree);
 	void DegreeToRadian(float Degree, float& Radian);
 	void MakeAngleAxis(float Angle, FVector Axis, FVector4& AngleAxis);
 	void QuatToAngleAxis(FQuat Quat, FVector4& AngleAxis);
-
-	void PrintMessage(FString msg);
-	void PrintFloat(FString msg, float v);
-	void PrintVector(FString msg, FVector v);
-	void PrintQuat(FString msg, FQuat q);
 
 protected:
 	// Called when the game starts or when spawned
