@@ -106,6 +106,7 @@ void AVideoReader::UpdateImageData()
 				Data[i].B = mImage.data[i * 3 + 0];
 				Data[i].G = mImage.data[i * 3 + 1];
 				Data[i].R = mImage.data[i * 3 + 2];
+                // Alpha is as 255;
 			}
 		}
 

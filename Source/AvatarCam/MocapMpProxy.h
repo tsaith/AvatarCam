@@ -30,6 +30,12 @@ public:
     void Detect(cv::Mat image);
     void SetEngineName(FString engineName);
     void Calibrate();
+    const int GetNumBones();
+    const int GetBoneDims();
+    const int GetQuatDims();
+    float* GetBone(int i);
+    float* GetQuat(int i);
+
     int GetNumFacialCtrlParams();
     void GetFacialCtrlParams(TArray<float> &params);
 
@@ -44,6 +50,13 @@ private:
     typedef void (*SetEngineNameT)(char*);
     typedef void (*DetectT)(cv::Mat);
     typedef void (*CalibrateT)();
+
+    typedef const int (*GetNumBonesT)();
+    typedef const int (*GetBoneDimsT)();
+    typedef const int (*GetQuatDimsT)();
+    typedef float* (*GetBoneT)(int i);
+    typedef float* (*GetQuatT)(int i);
+
     typedef int (*GetNumFacialCtrlParamsT)();
     typedef float* (*GetFacialCtrlParamsT)();
 
@@ -52,6 +65,13 @@ private:
     SetEngineNameT mSetEngineName = NULL;
     DetectT mDetect = NULL;
     CalibrateT mCalibrate = NULL;
+
+    GetNumBonesT mGetNumBones = NULL;
+    GetBoneDimsT mGetBoneDims = NULL;
+    GetQuatDimsT mGetQuatDims = NULL;
+    GetBoneT mGetBone = NULL;
+    GetQuatT mGetQuat = NULL;
+
     GetNumFacialCtrlParamsT mGetNumFacialCtrlParams = NULL;
     GetFacialCtrlParamsT mGetFacialCtrlParams = NULL;
 

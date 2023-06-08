@@ -4,9 +4,10 @@
 
 #include "PreOpenCVHeaders.h"
 #include "OpenCVHelper.h"
-#include <ThirdParty/OpenCV/include/opencv2/imgproc.hpp>
-#include <ThirdParty/OpenCV/include/opencv2/highgui/highgui.hpp>
-#include <ThirdParty/OpenCV/include/opencv2/core.hpp>
+#include <ThirdParty/OpenCV/include/opencv2/opencv.hpp>
+//#include <ThirdParty/OpenCV/include/opencv2/imgproc.hpp>
+//#include <ThirdParty/OpenCV/include/opencv2/highgui/highgui.hpp>
+//#include <ThirdParty/OpenCV/include/opencv2/core.hpp>
 #include "PostOpenCVHeaders.h"
 
 #include "MocapMpProxy.h"
@@ -263,7 +264,7 @@ private:
 	FString mEngineName = "unreal";
 	bool mIsCalibrated = false;
 
-	static const int mNumJoints = 68;
+	int mNumBones = -1;
 	TArray<FVector> mBones;
 	TArray<FQuat> mQuats;
 

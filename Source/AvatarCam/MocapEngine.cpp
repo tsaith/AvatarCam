@@ -24,10 +24,15 @@ AMocapEngine::AMocapEngine()
 		UE_LOG(LogTemp, Warning, TEXT("Mocap: Failed to load library."));
 	}
 
+	// Number of bones
+	mNumBones = mMocap.GetNumBones();
+	//UPrintBPLibrary::PrintInt("NumBones: ", mMocap.GetNumBones());
+
 	// Bones
-	mBones.SetNum(mNumJoints);
+	mBones.SetNum(mNumBones);
+
 	// Quaternions 
-	mQuats.SetNum(mNumJoints);
+	mQuats.SetNum(mNumBones);
 
 	// Facial control parameters
 	//mFacialCtrlParams.SetNum(mMocap.GetNumFacialCtrlParams());
@@ -59,7 +64,6 @@ void AMocapEngine::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	UPrintBPLibrary::PrintMessage("hi");
 	Process();
 }
 
@@ -82,6 +86,8 @@ void AMocapEngine::Process() {
 		// Image 
 		ConvertDataToImage(mData, mImage);
 
+
+		cv::circle(mImage, cv::Point(320, 240), 3, cv::Scalar(255, 0, 0), 3);
 		//std::string imagePath = "C:\\Users\\andrew\\projects\\AvatarCam\\Outputs\\image.jpg";
 		//cv::imwrite(imagePath, mImage);
 
@@ -94,6 +100,32 @@ void AMocapEngine::Process() {
 
 		// Detection
 		mMocap.Detect(mImage);
+
+		// Update bones and quats
+		float* pBone;
+		float* pQuat;
+		for (int i = 0; i < mNumBones; i++) {
+
+			pBone = mMocap.GetBone(i);
+			pQuat = mMocap.GetQuat(i);
+
+			mBones[i].X = pBone[0];
+			mBones[i].Y = pBone[1];
+			mBones[i].Z = pBone[2];
+
+			mQuats[i].W = pQuat[0];
+			mQuats[i].X = pQuat[1];
+			mQuats[i].Y = pQuat[2];
+			mQuats[i].Z = pQuat[3];
+
+		}
+
+		int iRightWrist = 15;
+		FVector rightWrist = mBones[iRightWrist];
+	    UPrintBPLibrary::PrintVector("RightWrist: ", rightWrist);
+
+		FString baseDir = FPlatformProcess::BaseDir();
+	    UPrintBPLibrary::PrintString("baseDir: ", baseDir);
 
 		// Perform diagnostics 
 		Diagnostic();

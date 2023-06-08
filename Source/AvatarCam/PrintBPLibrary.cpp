@@ -8,9 +8,22 @@ void UPrintBPLibrary::PrintMessage(FString Msg, bool ToScreen, bool ToLog) {
 
 }
 
+void UPrintBPLibrary::PrintString(FString Msg, FString S, bool ToScreen, bool ToLog) {
+
+	Msg += S;
+	PrintMessage(Msg, ToScreen, ToLog);
+
+}
+
 void UPrintBPLibrary::PrintBool(FString Msg, bool Input, bool ToScreen, bool ToLog) {
 
-	FString s = FString::SanitizeFloat(Input);
+	FString s;
+
+	if (Input) {
+		s = "True";
+	} else {
+		s = "False";
+	}
 
 	Msg += s;
 	PrintMessage(Msg, ToScreen, ToLog);
@@ -19,7 +32,7 @@ void UPrintBPLibrary::PrintBool(FString Msg, bool Input, bool ToScreen, bool ToL
 
 void UPrintBPLibrary::PrintInt(FString Msg, int Input, bool ToScreen, bool ToLog) {
 
-	FString s = FString::SanitizeFloat(Input);
+	FString s = FString::FromInt(Input);
 
 	Msg += s;
 	PrintMessage(Msg, ToScreen, ToLog);

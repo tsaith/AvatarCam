@@ -51,8 +51,14 @@ void MocapMpProxy::ImportMethods() {
         mSetEngineName = GetFuncPointer<SetEngineNameT>(mHandle, "MocapMpSetEngineName");
         mDetect = GetFuncPointer<DetectT>(mHandle, "MocapMpDetect");
         mCalibrate = GetFuncPointer<CalibrateT>(mHandle, "MocapMpCalibrate");
+        mGetNumBones = GetFuncPointer<GetNumBonesT>(mHandle, "MocapMpGetNumBones");
+        mGetBoneDims = GetFuncPointer<GetBoneDimsT>(mHandle, "MocapMpGetBoneDims");
+        mGetQuatDims = GetFuncPointer<GetQuatDimsT>(mHandle, "MocapMpGeeQuatDims");
+        mGetBone = GetFuncPointer<GetBoneT>(mHandle, "MocapMpGetBone");
+        mGetQuat = GetFuncPointer<GetQuatT>(mHandle, "MocapMpGetQuat");
         //mGetNumFacialCtrlParams = GetFuncPointer<GetNumFacialCtrlParamsT>(mHandle, "MocapMpGetNumFacialCtrlParams");
         //mGetFacialCtrlParams = GetFuncPointer<GetFacialCtrlParamsT>(mHandle, "MocapMpGetFacialCtrlParams");
+        mFinalize = GetFuncPointer<FinalizeT>(mHandle, "MocapMpFinalize");
     }
 
 }
@@ -103,6 +109,7 @@ void MocapMpProxy::Detect(cv::Mat image) {
 }
 
 void MocapMpProxy::Calibrate() {
+
     if (mCalibrate != NULL) {
         mCalibrate();
     }
@@ -111,6 +118,73 @@ void MocapMpProxy::Calibrate() {
     }
 
 }
+
+const int MocapMpProxy::GetNumBones() {
+
+    if (mGetNumBones != NULL) {
+        return mGetNumBones();
+    }
+    else {
+        UE_LOG(LogTemp, Warning, TEXT("Error: mGetNumBones is NULL."));
+        return -1;
+    }
+
+}
+
+const int MocapMpProxy::GetBoneDims() {
+
+    if (mGetBoneDims != NULL) {
+        return mGetBoneDims();
+    }
+    else {
+        UE_LOG(LogTemp, Warning, TEXT("Error: mGetBoneDims is NULL."));
+        return -1;
+    }
+
+}
+
+const int MocapMpProxy::GetQuatDims() {
+
+    if (mGetQuatDims != NULL) {
+        return mGetQuatDims();
+    }
+    else {
+        UE_LOG(LogTemp, Warning, TEXT("Error: mGetQuatDims is NULL."));
+        return -1;
+    }
+
+}
+
+float* MocapMpProxy::GetBone(int i) {
+
+    float* bone;
+    if (mGetBone != NULL) {
+        bone = mGetBone(i);
+    }
+    else {
+        UE_LOG(LogTemp, Warning, TEXT("Error: mGetBone is NULL."));
+        bone = NULL;
+    }
+
+    return bone;
+}
+
+float* MocapMpProxy::GetQuat(int i) {
+
+    float* quat;
+    if (mGetQuat != NULL) {
+         quat = mGetQuat(i);
+    }
+    else {
+        UE_LOG(LogTemp, Warning, TEXT("Error: mGetQuat is NULL."));
+        quat = NULL;
+    }
+
+    return quat;
+
+}
+
+
 
 /*
 int MocapMpProxy::GetNumFacialCtrlParams() {
