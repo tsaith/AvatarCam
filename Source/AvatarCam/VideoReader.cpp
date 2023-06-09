@@ -19,7 +19,7 @@ void AVideoReader::BeginPlay()
     mImage = cv::Mat(ImageHeight, ImageWidth, CV_8UC3, cv::Scalar(0, 0, 0));
 
     // Initialize data array
-    Data.Init(FColor(0, 0, 0, 255), ImageWidth * ImageHeight);
+    mData.Init(FColor(0, 0, 0, 255), ImageWidth * ImageHeight);
 
     if (AsVideoReader) {
     
@@ -80,16 +80,10 @@ void AVideoReader::Tick(float DeltaTime)
         mVideoReader.Read(frame);
         cv::resize(frame, mImage, cv::Size(ImageWidth, ImageHeight));
 
-        /*
-        if (!mImage.empty()) {
-            cv::namedWindow("win");
-            cv::imshow("win", frame);
-	        cv::waitKey(5);
-        }
-        */
 	}
     
     UpdateImageData();
+    UpdateImageTexture();
 
 }
 
@@ -103,9 +97,9 @@ void AVideoReader::UpdateImageData()
 			for (int x = 0; x < ImageWidth; x++)
 			{
 				int i = x + (y * ImageWidth);
-				Data[i].B = mImage.data[i * 3 + 0];
-				Data[i].G = mImage.data[i * 3 + 1];
-				Data[i].R = mImage.data[i * 3 + 2];
+				mData[i].B = mImage.data[i * 3 + 0];
+				mData[i].G = mImage.data[i * 3 + 1];
+				mData[i].R = mImage.data[i * 3 + 2];
                 // Alpha is as 255;
 			}
 		}
@@ -114,3 +108,16 @@ void AVideoReader::UpdateImageData()
 
 }
 
+void AVideoReader::UpdateImageTexture()
+{
+    mImageTexture = FOpenCVHelper::TextureFromCvMat(mImage);
+}
+
+void AVideoReader::GetData(TArray<FColor>& Data) {
+	Data = mData;
+}
+
+void AVideoReader::GetImageTexture(UTexture2D* &ImageTexture)
+{
+	ImageTexture = mImageTexture;
+}

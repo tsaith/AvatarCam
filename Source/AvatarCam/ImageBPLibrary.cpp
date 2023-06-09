@@ -16,27 +16,10 @@ UTexture2D* UImageBPLibrary::CreateImageTexture(int Width, int Height)
     return Texture;
 }
 
-/*
-void UImageBPLibrary::PixelArrayToTexture(UTexture2D* &Texture, TArray<FColor> PixelArray, int Width, int Height)
-{
-
-    // Lock the texture so it can be modified
-    void* textureData = Texture->GetPlatformData()->Mips[0].BulkData.Lock(LOCK_READ_WRITE);
-
-    // Copy the pixels to the texture
-    FMemory::Memcpy(textureData, PixelArray.GetData(), PixelArray.Num()*sizeof(FColor));
-
-    // Unlock the texture
-    Texture->GetPlatformData()->Mips[0].BulkData.Unlock();
-
-    // Update the texture and mark it as ready for use
-    Texture->UpdateResource();
-
-}
-*/
-
 UTexture2D* UImageBPLibrary::CreateTextureFromPixelArray(TArray<FColor> PixelArray, int Width, int Height)
 {
+
+    check(PixelArray.Num() == Width * Height);
 
     UTexture2D* Texture = CreateImageTexture(Width, Height);
 
@@ -54,3 +37,4 @@ UTexture2D* UImageBPLibrary::CreateTextureFromPixelArray(TArray<FColor> PixelArr
 
     return Texture;
 }
+

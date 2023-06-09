@@ -18,6 +18,15 @@ public:
 	AVideoReader();
 
     void UpdateImageData();
+    void UpdateImageTexture();
+
+
+	UFUNCTION(BlueprintPure, Category = "VideoReader")
+		void GetData(TArray<FColor>& Data);
+
+	UFUNCTION(BlueprintPure, Category = "VideoReader")
+		void GetImageTexture(UTexture2D* &ImageTexture);
+
 
     UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "VideoReader")
         int ImageWidth = 640;
@@ -56,13 +65,6 @@ public:
     UPROPERTY(BlueprintReadWrite, Category = VideoReader)
         FVector2D VideoSize;
 
-    // The current data array
-    UPROPERTY(BlueprintReadOnly, Category = VideoReader)
-        TArray<FColor> Data;
-
-    // The current video frame's corresponding texture
-    UPROPERTY(BlueprintReadOnly, Category = VideoReader)
-        UTexture2D* VideoTexture;
 
 protected:
 	// Called when the game starts or when spawned
@@ -85,4 +87,7 @@ private:
     FString mImagePath;
 
     cv::Mat mImage;
+    TArray<FColor> mData;
+    UTexture2D* mImageTexture;
+
 };

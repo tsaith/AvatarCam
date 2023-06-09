@@ -83,9 +83,11 @@ void AMocapEngine::Process() {
 	    //UPrintBPLibrary::PrintInt("Height: ", ImageHeight);
 		bool bIsEmpty = mImage.empty();
 	    //UPrintBPLibrary::PrintBool("is empty: ", bIsEmpty);
-		// Image 
-		ConvertDataToImage(mData, mImage);
+		// Image
 
+		// Convert data into image.
+		ConvertDataToImage(mData, mImage);
+		mImageTexture = FOpenCVHelper::TextureFromCvMat(mImage);
 
 		cv::circle(mImage, cv::Point(320, 240), 3, cv::Scalar(255, 0, 0), 3);
 		//std::string imagePath = "C:\\Users\\andrew\\projects\\AvatarCam\\Outputs\\image.jpg";
@@ -137,9 +139,12 @@ void AMocapEngine::Diagnostic() {
 
 }
 
-
 void AMocapEngine::SetImageData(TArray<FColor> Data) {
 	mData = Data;
+}
+
+void AMocapEngine::SetImageTexture(UTexture2D* ImageTexture) {
+	mImageTexture = ImageTexture;
 }
 
 void AMocapEngine::Calibrate() {
@@ -163,6 +168,14 @@ void AMocapEngine::GetQuats(TArray<FQuat>& Quats) {
 	Quats = mQuats;
 }
 
+void AMocapEngine::GetData(TArray<FColor>& Data) {
+	Data = mData;
+}
+
+void AMocapEngine::GetImageTexture(UTexture2D* &ImageTexture)
+{
+	ImageTexture = mImageTexture;
+}
 
 void AMocapEngine::ConvertDataToImage(TArray<FColor>& Data, cv::Mat& Image) {
 

@@ -52,6 +52,9 @@ public:
 		void SetImageData(TArray<FColor> Data);
 
 	UFUNCTION(BlueprintCallable, Category = "MocapEngine")
+		void SetImageTexture(UTexture2D* ImageTexture);
+
+	UFUNCTION(BlueprintCallable, Category = "MocapEngine")
 		void Calibrate();
 
 	UFUNCTION(BlueprintCallable, Category = "MocapEngine")
@@ -65,6 +68,12 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = "MocapEngine")
 		void GetQuats(TArray<FQuat>& Quats);
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		void GetData(TArray<FColor>& Data);
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		void GetImageTexture(UTexture2D* &ImageTexture);
 
 	/*
 	UFUNCTION(BlueprintPure, Category = "MocapEngine")
@@ -257,6 +266,7 @@ private:
 	cv::Mat mFrame;
 	cv::Mat mImage;
 	TArray<FColor> mData;
+	UTexture2D* mImageTexture = nullptr;
 
 	MocapMpProxy mMocap = MocapMpProxy();
 
