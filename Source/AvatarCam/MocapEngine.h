@@ -36,6 +36,12 @@ public:
 	//void UpdateLocomotion();
 	void Diagnostic();
 	
+	cv::Mat CreateMatFromTexture(UTexture2D* Texture);
+	void ConvertDataToImage(TArray<FColor>& Data, cv::Mat& Image);
+	void RadianToDegree(float Radian, float& Degree);
+	void DegreeToRadian(float Degree, float& Radian);
+	void MakeAngleAxis(float Angle, FVector Axis, FVector4& AngleAxis);
+	void QuatToAngleAxis(FQuat Quat, FVector4& AngleAxis);
 
 	// Parameters
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = MocapEngine)
@@ -249,12 +255,6 @@ public:
 	UFUNCTION(BlueprintPure, Category = "MocapEngine")
 		bool IsSquat();
 	*/
-
-	void ConvertDataToImage(TArray<FColor>& Data, cv::Mat& Image);
-	void RadianToDegree(float Radian, float& Degree);
-	void DegreeToRadian(float Degree, float& Radian);
-	void MakeAngleAxis(float Angle, FVector Axis, FVector4& AngleAxis);
-	void QuatToAngleAxis(FQuat Quat, FVector4& AngleAxis);
 
 protected:
 	// Called when the game starts or when spawned

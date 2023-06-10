@@ -87,6 +87,7 @@ void AMocapEngine::Process() {
 
 		// Convert data into image.
 		ConvertDataToImage(mData, mImage);
+	    //mImage = CreateMatFromTexture(mImageTexture);
 		mImageTexture = FOpenCVHelper::TextureFromCvMat(mImage);
 
 		cv::circle(mImage, cv::Point(320, 240), 3, cv::Scalar(255, 0, 0), 3);
@@ -234,5 +235,36 @@ void AMocapEngine::QuatToAngleAxis(FQuat Quat, FVector4& AngleAxis)
 	MakeAngleAxis(angleDeg, axis, AngleAxis);
 
 }
+
+cv::Mat AMocapEngine::CreateMatFromTexture(UTexture2D* Texture) {
+
+	if (Texture == nullptr) {
+		return cv::Mat();
+	}
+
+	// Ensure the format
+	if (Texture->GetPixelFormat() != PF_B8G8R8A8) {
+		UE_LOG(LogTemp, Error, TEXT("Texture pixel format is not BGRA8."));
+		return cv::Mat();
+	}
+
+	// Lock and get data
+	FTexture2DMipMap& Mip = Texture->PlatformData->Mips[0];
+	void* Data = Mip.BulkData.Lock(LOCK_READ_ONLY);
+	int32 Width = Mip.SizeX, Height = Mip.SizeY;
+
+	// Create a Mat
+	cv::Mat Mat(Height, Width, CV_8UC4, Data);
+
+	// Unlock data
+	Mip.BulkData.Unlock();
+
+	// Convert BGRA to BGR
+	cv::cvtColor(Mat, Mat, cv::COLOR_BGRA2BGR);
+
+	return Mat;
+}
+
+
 
 

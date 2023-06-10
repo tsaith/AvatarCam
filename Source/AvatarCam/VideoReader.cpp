@@ -110,8 +110,12 @@ void AVideoReader::UpdateImageData()
 
 void AVideoReader::UpdateImageTexture()
 {
-    mImageTexture = FOpenCVHelper::TextureFromCvMat(mImage);
+
+    mImageTexture = CreateTextureFromPixelArray(mData, mImage.cols, mImage.rows);
+
+    //mImageTexture = FOpenCVHelper::TextureFromCvMat(mImage);
 }
+
 
 void AVideoReader::GetData(TArray<FColor>& Data) {
 	Data = mData;
@@ -121,3 +125,59 @@ void AVideoReader::GetImageTexture(UTexture2D* &ImageTexture)
 {
 	ImageTexture = mImageTexture;
 }
+
+UTexture2D* AVideoReader::CreateTextureFromPixelArray(TArray<FColor> &Data, int Width, int Height)
+{
+    UTexture2D* Texture;
+
+    Texture = UTexture2D::CreateTransient(Width, Height, PF_B8G8R8A8);
+    if (!Texture)
+    {
+        return nullptr;
+    }
+ 
+    // Editor only 
+    //Texture->MipGenSettings = TMGS_NoMipmaps;
+
+    //Texture->NeverStream = true;
+
+    //Texture->SRGB = 0;
+
+    FTexture2DMipMap& Mip = Texture->PlatformData->Mips[0];
+    void* pData = Mip.BulkData.Lock(LOCK_READ_WRITE);
+
+    //FMemory::Memcpy(pData, Data.GetData(), Width * Height * 4);
+    FMemory::Memcpy(pData, Data.GetData(), Data.Num() * sizeof(FColor));
+    Mip.BulkData.Unlock();
+    Texture->UpdateResource();
+
+    return Texture;
+}
+
+/*
+UTexture2D* CreateTextureFromPixelData(TArray<FColor>& Data, int Width, int Height)
+{
+    if (Data.Num() != Width * Height)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("Invalid size of color array!"));
+        return nullptr;
+    }
+
+    UTexture2D* Texture = UTexture2D::CreateTransient(Width, Height, PF_B8G8R8A8);
+    if (!Texture)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("Failed to create texture!"));
+        return nullptr;
+    }
+
+    FColor* TextureData = static_cast<FColor*>(Texture->GetPlatformData()->Mips[0].BulkData.Lock(LOCK_READ_WRITE));
+
+    FMemory::Memcpy(TextureData, Data.GetData(), Data.Num() * sizeof(FColor));
+
+    Texture->GetPlatformData()->Mips[0].BulkData.Unlock();
+
+    Texture->UpdateResource();
+
+    return Texture;
+}
+*/

@@ -4,6 +4,8 @@
 
 #include "VideoReaderCV.h"
 
+#include "Runtime/Engine/Classes/Engine/Texture2D.h"
+
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "VideoReader.generated.h"
@@ -20,6 +22,7 @@ public:
     void UpdateImageData();
     void UpdateImageTexture();
 
+    UTexture2D* CreateTextureFromPixelArray(TArray<FColor> &Data, int Width, int Height);
 
 	UFUNCTION(BlueprintPure, Category = "VideoReader")
 		void GetData(TArray<FColor>& Data);
@@ -88,6 +91,6 @@ private:
 
     cv::Mat mImage;
     TArray<FColor> mData;
-    UTexture2D* mImageTexture;
+    UTexture2D* mImageTexture = nullptr;
 
 };
