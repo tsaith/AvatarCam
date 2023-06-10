@@ -19,7 +19,8 @@ public class AvatarCam : ModuleRules
 		PrivateDependencyModuleNames.AddRange(new string[] {
 			"Core", "CoreUObject", "Engine", "InputCore",
 			"HeadMountedDisplay", "EnhancedInput",
-		    "OpenCV", "OpenCVHelper",
+			"ImageWrapper", "RenderCore",
+			"OpenCV", "OpenCVHelper",
 			"VideoReader",
 		});
 

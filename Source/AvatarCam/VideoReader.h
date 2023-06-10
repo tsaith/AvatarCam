@@ -5,6 +5,7 @@
 #include "VideoReaderCV.h"
 
 #include "Runtime/Engine/Classes/Engine/Texture2D.h"
+#include "ImageUtils.h"
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
@@ -23,6 +24,10 @@ public:
     void UpdateImageTexture();
 
     UTexture2D* CreateTextureFromPixelArray(TArray<FColor> &Data, int Width, int Height);
+    void createAlphaImage(const cv::Mat& Mat, cv::Mat_<cv::Vec4b>& Dst);
+
+	UFUNCTION(BlueprintCallable, Category = "VideoReader")
+    bool ExportImage(UTexture2D* Texture2D, const FString& Path);
 
 	UFUNCTION(BlueprintPure, Category = "VideoReader")
 		void GetData(TArray<FColor>& Data);
