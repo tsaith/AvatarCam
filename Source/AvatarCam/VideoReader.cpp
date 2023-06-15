@@ -189,6 +189,45 @@ void AVideoReader::createAlphaImage(const cv::Mat& Mat, cv::Mat_<cv::Vec4b>& Dst
 }
 
 
+void AVideoReader::ConvertTextureToPixelArray(UTexture2D* Texture2D, TArray<FColor> &PixelArray)
+{
+
+    TextureCompressionSettings OldCompressionSettings = Texture2D->CompressionSettings;
+    TextureMipGenSettings OldMipGenSettings = Texture2D->MipGenSettings;
+    bool OldSRGB = Texture2D->SRGB;
+
+    Texture2D->CompressionSettings = TextureCompressionSettings::TC_VectorDisplacementmap;
+    Texture2D->MipGenSettings = TextureMipGenSettings::TMGS_NoMipmaps;
+    Texture2D->SRGB = false;
+    Texture2D->UpdateResource();
+
+    FTexture2DMipMap& mipmap = Texture2D->PlatformData->Mips[0];
+    uint8* Data = (uint8*)mipmap.BulkData.Lock(LOCK_READ_WRITE);
+    if (Data == nullptr)
+    {
+        mipmap.BulkData.Unlock();
+        Texture2D->UpdateResource();
+
+        UE_LOG(LogTemp, Warning, TEXT("Error: empty data pointer of texture."));
+    }
+
+    int width = Texture2D->PlatformData->SizeX;
+    int height = Texture2D->PlatformData->SizeY;
+    for (int32 y = 0; y < height; y++)
+    {
+        for (int32 x = 0; x < width; x++)
+        {
+            FColor pixel;
+            pixel.B = Data[(y * width + x) * 4 + 0];//B 0 - 255
+            pixel.G = Data[(y * width + x) * 4 + 1];//G
+            pixel.R = Data[(y * width + x) * 4 + 2];//R
+            pixel.A = Data[(y * width + x) * 4 + 3];//A 
+            PixelArray.Add(pixel);
+        }
+    }
+
+}
+
 bool AVideoReader::ExportImage(UTexture2D* Texture2D, const FString& Path)
 {
 
