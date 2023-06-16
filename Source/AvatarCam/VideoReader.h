@@ -86,11 +86,13 @@ public:
 
 private:
 
+    FString ContentDirName = "Content";
     FString ImageDirName = "Images";
     FString VideoDirName = "Videos";
     FString mProjectDir = FPaths::ProjectDir();
-    FString mVideoDir = FPaths::Combine(mProjectDir, VideoDirName);
-    FString mImageDir = FPaths::Combine(mProjectDir, ImageDirName);
+    FString mContentDir = FPaths::Combine(mProjectDir, ContentDirName);
+    FString mVideoDir = FPaths::Combine(mContentDir, VideoDirName);
+    FString mImageDir = FPaths::Combine(mContentDir, ImageDirName);
 
     VideoReaderCV mVideoReader = VideoReaderCV();
     FString mVideoPath;
