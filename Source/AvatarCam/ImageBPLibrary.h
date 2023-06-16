@@ -22,10 +22,10 @@ public:
         static UTexture2D* CreateImageTexture(int Width, int Height);
 
     UFUNCTION(BlueprintPure, Category = "ImageBPLibrary")
-        static UTexture2D* CreateTextureFromPixelArray(TArray<FColor> PixelArray, int Width, int Height);
+        static void ConvertTextureToPixelArray(UTexture2D* &Texture, TArray<FColor>& PixelArray);
 
     UFUNCTION(BlueprintPure, Category = "ImageBPLibrary")
-        static void CreatePixelArrayFromTexture(UTexture2D* Texture2D, TArray<FColor>& PixelArray);
+        static void ConvertPixelArrayToTexture(TArray<FColor> &PixelArray, UTexture2D* &Texture, int Width, int Height);
 
 	UFUNCTION(BlueprintCallable, Category = "ImageBPLibrary")
         static bool ExportImage(UTexture2D* Texture2D, const FString& Path);

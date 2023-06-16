@@ -54,7 +54,7 @@ void AMocapEngine::BeginPlay()
 {
 	Super::BeginPlay();
 
-	mImage = cv::Mat(ImageHeight, ImageWidth, CV_8UC3, cv::Scalar(0, 0, 0));
+	mImage = cv::Mat(ImageHeight, ImageWidth, CV_8UC4, cv::Scalar(0, 0, 0, 255));
 	mData.Init(FColor(0, 0, 0, 255), ImageWidth*ImageHeight);
 
 }
@@ -74,6 +74,7 @@ void AMocapEngine::Process() {
 	FString leftStaticGesture;
 	FString rightStaticGesture;
 
+	cv::Mat image;
 	cv::Mat imageDebug;
 
 	// Motion capture 
@@ -86,23 +87,12 @@ void AMocapEngine::Process() {
 		// Image
 
 		// Convert data into image.
-		ConvertDataToImage(mData, mImage);
-	    //mImage = CreateMatFromTexture(mImageTexture);
-		mImageTexture = FOpenCVHelper::TextureFromCvMat(mImage);
-
-		cv::circle(mImage, cv::Point(320, 240), 3, cv::Scalar(255, 0, 0), 3);
-		//std::string imagePath = "C:\\Users\\andrew\\projects\\AvatarCam\\Outputs\\image.jpg";
-		//cv::imwrite(imagePath, mImage);
-
-		//cv::imshow("win", mImage);
-
-		//resize(mImage, imageDebug, cv::Size(320, 240));
-		//cv::imshow("Original", imageDebug);
-
-
+		//ConvertDataToImage(mData, mImage);
+		ConvertTextureToCvMat(mImageTexture, mImage);
 
 		// Detection
-		mMocap.Detect(mImage);
+	    cv::cvtColor(mImage, image, cv::COLOR_BGRA2BGR);
+		mMocap.Detect(image);
 
 		// Update bones and quats
 		float* pBone;
@@ -137,6 +127,64 @@ void AMocapEngine::Process() {
 }
 
 void AMocapEngine::Diagnostic() {
+
+	mImageDiag = mImage.clone();
+
+	//AppendAlphaChannel(mImage, mImageDiag);
+
+	//cv::circle(mImageDiag, cv::Point(320, 240), 3, cv::Scalar(255, 0, 0), 3);
+
+	//ConvertCvMatToTexture(mImageDiag, mDiagTexture);
+	mDiagTexture = FOpenCVHelper::TextureFromCvMat(mImageDiag);
+}
+
+void AMocapEngine::ConvertTextureToCvMat(UTexture2D* &Texture, cv::Mat &M) {
+
+	if (Texture == nullptr) {
+		UE_LOG(LogTemp, Error, TEXT("Texture is nullptr."));
+		return;
+	}
+
+	// Ensure the format
+	if (Texture->GetPixelFormat() != PF_B8G8R8A8) {
+		UE_LOG(LogTemp, Error, TEXT("Texture pixel format is not BGRA8."));
+		return;
+	}
+
+	// Lock and get data
+	FTexture2DMipMap& Mip = Texture->GetPlatformData()->Mips[0];
+	void* Data = Mip.BulkData.Lock(LOCK_READ_ONLY);
+	int32 Width = Mip.SizeX, Height = Mip.SizeY;
+
+	// Create a Mat
+	M = cv::Mat(Height, Width, CV_8UC4, Data);
+
+	// Unlock data
+	Mip.BulkData.Unlock();
+
+	// Convert BGRA to BGR
+	cv::cvtColor(M, M, cv::COLOR_BGRA2BGR);
+
+}
+
+void AMocapEngine::ConvertCvMatToTexture(cv::Mat &M, UTexture2D* &Texture) {
+
+	Texture = FOpenCVHelper::TextureFromCvMat(M);
+
+}
+
+void AMocapEngine::AppendAlphaChannel(cv::Mat &Src, cv::Mat &Dst) {
+
+    assert(Src.channels() == 3);
+
+    std::vector<cv::Mat> channels;
+
+    cv::split(Src, channels);
+
+    cv::Mat alpha(Src.rows, Src.cols, CV_8UC1, cv::Scalar(255));
+    channels.push_back(alpha);
+
+    cv::merge(channels, Dst);
 
 }
 
@@ -178,10 +226,15 @@ void AMocapEngine::GetImageTexture(UTexture2D* &ImageTexture)
 	ImageTexture = mImageTexture;
 }
 
+void AMocapEngine::GetDiagTexture(UTexture2D* &DiagTexture)
+{
+	DiagTexture = mDiagTexture;
+}
+
 void AMocapEngine::ConvertDataToImage(TArray<FColor>& Data, cv::Mat& Image) {
 
 	uchar* p = Image.data;
-	const int numChannels = 3;
+	const int numChannels = 4;
 
 	int k = 0;
 	int m = 0;
@@ -194,6 +247,7 @@ void AMocapEngine::ConvertDataToImage(TArray<FColor>& Data, cv::Mat& Image) {
 			p[k] = Data[m].B;
 			p[k + 1] = Data[m].G;
 			p[k + 2] = Data[m].R;
+			p[k + 3] = Data[m].A;
 
 		}
 	}
@@ -249,7 +303,7 @@ cv::Mat AMocapEngine::CreateMatFromTexture(UTexture2D* Texture) {
 	}
 
 	// Lock and get data
-	FTexture2DMipMap& Mip = Texture->PlatformData->Mips[0];
+	FTexture2DMipMap& Mip = Texture->GetPlatformData()->Mips[0];
 	void* Data = Mip.BulkData.Lock(LOCK_READ_ONLY);
 	int32 Width = Mip.SizeX, Height = Mip.SizeY;
 

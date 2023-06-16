@@ -23,13 +23,7 @@ public:
     void UpdateImageData();
     void UpdateImageTexture();
 
-    UTexture2D* CreateTextureFromPixelArray(TArray<FColor> &Data, int Width, int Height);
-    void ConvertTextureToPixelArray(UTexture2D* Texture2D, TArray<FColor>& PixelArray);
-
-    void createAlphaImage(const cv::Mat& Mat, cv::Mat_<cv::Vec4b>& Dst);
-
-	UFUNCTION(BlueprintCallable, Category = "VideoReader")
-        bool ExportImage(UTexture2D* Texture2D, const FString& Path);
+    void AppendAlphaChannel(cv::Mat& Src, cv::Mat& Dst);
 
 	UFUNCTION(BlueprintPure, Category = "VideoReader")
 		void GetData(TArray<FColor>& Data);

@@ -100,7 +100,7 @@ void AVideoReader::UpdateImageData()
 				mData[i].B = mImage.data[i * 3 + 0];
 				mData[i].G = mImage.data[i * 3 + 1];
 				mData[i].R = mImage.data[i * 3 + 2];
-                // Alpha is as 255;
+                mData[i].A = 255;
 			}
 		}
 
@@ -110,15 +110,9 @@ void AVideoReader::UpdateImageData()
 
 void AVideoReader::UpdateImageTexture()
 {
-
-    //mImageTexture = CreateTextureFromPixelArray(mData, mImage.cols, mImage.rows);
-
-    cv::Mat_<cv::Vec4b> tmpMat;
-    createAlphaImage(mImage, tmpMat);
+    cv::Mat tmpMat;
+    AppendAlphaChannel(mImage, tmpMat);
     mImageTexture = FOpenCVHelper::TextureFromCvMat(tmpMat);
-
-    FString filepath = "C:\\Users\\andrew\\projects\\AvatarCam\\Outputs\\diag.png";
-    ExportImage(mImageTexture, filepath);
 }
 
 
@@ -131,150 +125,18 @@ void AVideoReader::GetImageTexture(UTexture2D* &ImageTexture)
 	ImageTexture = mImageTexture;
 }
 
-UTexture2D* AVideoReader::CreateTextureFromPixelArray(TArray<FColor> &Data, int Width, int Height)
-{
-    UTexture2D*Texture = UTexture2D::CreateTransient(Width, Height, PF_B8G8R8A8);
-    if (!Texture)
-    {
-        return nullptr;
-    }
- 
-    FTexture2DMipMap& Mip = Texture->PlatformData->Mips[0];
-    void* pData = Mip.BulkData.Lock(LOCK_READ_WRITE);
 
-    FMemory::Memcpy(pData, Data.GetData(), Width * Height * 4);
-    Mip.BulkData.Unlock();
-    Texture->UpdateResource();
+void AVideoReader::AppendAlphaChannel(cv::Mat &Src, cv::Mat &Dst) {
 
-    return Texture;
-}
+    assert(Src.channels() == 3);
 
-/*
-UTexture2D* AVideoReader::CreateTextureFromPixelArray(TArray<FColor>& Data, int Width, int Height)
-{
-    if (Data.Num() != Width * Height)
-    {
-        UE_LOG(LogTemp, Warning, TEXT("Invalid size of color array!"));
-        return nullptr;
-    }
+    std::vector<cv::Mat> channels;
 
-    UTexture2D* Texture = UTexture2D::CreateTransient(Width, Height, PF_B8G8R8A8);
-    if (!Texture)
-    {
-        UE_LOG(LogTemp, Warning, TEXT("Failed to create texture!"));
-        return nullptr;
-    }
+    cv::split(Src, channels);
 
-    FColor* TextureData = static_cast<FColor*>(Texture->GetPlatformData()->Mips[0].BulkData.Lock(LOCK_READ_WRITE));
-    FMemory::Memcpy(TextureData, Data.GetData(), Data.Num() * sizeof(FColor));
+    cv::Mat alpha(Src.rows, Src.cols, CV_8UC1, cv::Scalar(255));
+    channels.push_back(alpha);
 
-    Texture->GetPlatformData()->Mips[0].BulkData.Unlock();
+    cv::merge(channels, Dst);
 
-    Texture->UpdateResource();
-
-    return Texture;
-}
-*/
-
-void AVideoReader::createAlphaImage(const cv::Mat& Mat, cv::Mat_<cv::Vec4b>& Dst)
-{
-    std::vector<cv::Mat> matChannels;
-    cv::split(Mat, matChannels);
-
-    // create alpha channel
-    cv::Mat alpha = matChannels.at(0) + matChannels.at(1) + matChannels.at(2);
-    matChannels.push_back(alpha);
-
-    cv::merge(matChannels, Dst);
-}
-
-
-void AVideoReader::ConvertTextureToPixelArray(UTexture2D* Texture2D, TArray<FColor> &PixelArray)
-{
-
-    TextureCompressionSettings OldCompressionSettings = Texture2D->CompressionSettings;
-    TextureMipGenSettings OldMipGenSettings = Texture2D->MipGenSettings;
-    bool OldSRGB = Texture2D->SRGB;
-
-    Texture2D->CompressionSettings = TextureCompressionSettings::TC_VectorDisplacementmap;
-    Texture2D->MipGenSettings = TextureMipGenSettings::TMGS_NoMipmaps;
-    Texture2D->SRGB = false;
-    Texture2D->UpdateResource();
-
-    FTexture2DMipMap& mipmap = Texture2D->PlatformData->Mips[0];
-    uint8* Data = (uint8*)mipmap.BulkData.Lock(LOCK_READ_WRITE);
-    if (Data == nullptr)
-    {
-        mipmap.BulkData.Unlock();
-        Texture2D->UpdateResource();
-
-        UE_LOG(LogTemp, Warning, TEXT("Error: empty data pointer of texture."));
-    }
-
-    int width = Texture2D->PlatformData->SizeX;
-    int height = Texture2D->PlatformData->SizeY;
-    for (int32 y = 0; y < height; y++)
-    {
-        for (int32 x = 0; x < width; x++)
-        {
-            FColor pixel;
-            pixel.B = Data[(y * width + x) * 4 + 0];//B 0 - 255
-            pixel.G = Data[(y * width + x) * 4 + 1];//G
-            pixel.R = Data[(y * width + x) * 4 + 2];//R
-            pixel.A = Data[(y * width + x) * 4 + 3];//A 
-            PixelArray.Add(pixel);
-        }
-    }
-
-}
-
-bool AVideoReader::ExportImage(UTexture2D* Texture2D, const FString& Path)
-{
-
-    TextureCompressionSettings OldCompressionSettings = Texture2D->CompressionSettings;
-    TextureMipGenSettings OldMipGenSettings = Texture2D->MipGenSettings;
-    bool OldSRGB = Texture2D->SRGB;
-
-    Texture2D->CompressionSettings = TextureCompressionSettings::TC_VectorDisplacementmap;
-    Texture2D->MipGenSettings = TextureMipGenSettings::TMGS_NoMipmaps;
-    Texture2D->SRGB = false;
-    Texture2D->UpdateResource();
-
-    FTexture2DMipMap& mipmap = Texture2D->PlatformData->Mips[0];
-    uint8* Data = (uint8*)mipmap.BulkData.Lock(LOCK_READ_WRITE);
-    if (Data == nullptr)
-    {
-        mipmap.BulkData.Unlock(); 
-        Texture2D->UpdateResource();
-        return false;
-    }
-
-    int width = Texture2D->PlatformData->SizeX;
-    int height = Texture2D->PlatformData->SizeY;
-    TArray<FColor> nColors;
-
-    for (int32 y = 0; y < height; y++)
-    {
-        for (int32 x = 0; x < width; x++)
-        {
-            FColor bColor;
-            bColor.B = Data[(y * width + x) * 4 + 0];//B 0 - 255
-            bColor.G = Data[(y * width + x) * 4 + 1];//G
-            bColor.R = Data[(y * width + x) * 4 + 2];//R
-            bColor.A = Data[(y * width + x) * 4 + 3];//A 
-            nColors.Add(bColor);
-        }
-    }
-    mipmap.BulkData.Unlock();
-
-    // return old parameters
-    Texture2D->CompressionSettings = OldCompressionSettings;
-    Texture2D->MipGenSettings = OldMipGenSettings;
-    Texture2D->SRGB = OldSRGB;
-
-    Texture2D->UpdateResource();
-
-    TArray<uint8> ImgData;
-    FImageUtils::CompressImageArray(width, height, nColors, ImgData);
-    return FFileHelper::SaveArrayToFile(ImgData, *Path);
 }

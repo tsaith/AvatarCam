@@ -36,6 +36,11 @@ public:
 	//void UpdateLocomotion();
 	void Diagnostic();
 	
+	void ConvertTextureToCvMat(UTexture2D* &Texture, cv::Mat &M);
+	void ConvertCvMatToTexture(cv::Mat &M, UTexture2D* &Texture);
+
+    void AppendAlphaChannel(cv::Mat& Src, cv::Mat& Dst);
+
 	cv::Mat CreateMatFromTexture(UTexture2D* Texture);
 	void ConvertDataToImage(TArray<FColor>& Data, cv::Mat& Image);
 	void RadianToDegree(float Radian, float& Degree);
@@ -60,6 +65,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "MocapEngine")
 		void SetImageTexture(UTexture2D* ImageTexture);
 
+
 	UFUNCTION(BlueprintCallable, Category = "MocapEngine")
 		void Calibrate();
 
@@ -80,6 +86,9 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = "MocapEngine")
 		void GetImageTexture(UTexture2D* &ImageTexture);
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		void GetDiagTexture(UTexture2D* &DiagTexture);
 
 	/*
 	UFUNCTION(BlueprintPure, Category = "MocapEngine")
@@ -265,8 +274,10 @@ private:
 	cv::VideoCapture mCap;
 	cv::Mat mFrame;
 	cv::Mat mImage;
+	cv::Mat mImageDiag;
 	TArray<FColor> mData;
 	UTexture2D* mImageTexture = nullptr;
+	UTexture2D* mDiagTexture = nullptr;
 
 	MocapMpProxy mMocap = MocapMpProxy();
 

@@ -16,52 +16,30 @@ UTexture2D* UImageBPLibrary::CreateImageTexture(int Width, int Height)
     return Texture;
 }
 
-UTexture2D* UImageBPLibrary::CreateTextureFromPixelArray(TArray<FColor> PixelArray, int Width, int Height)
-{
+void UImageBPLibrary::ConvertTextureToPixelArray(UTexture2D* &Texture, TArray<FColor> &PixelArray)
+{ 
 
-    check(PixelArray.Num() == Width * Height);
+    TextureCompressionSettings OldCompressionSettings = Texture->CompressionSettings;
+    TextureMipGenSettings OldMipGenSettings = Texture->MipGenSettings;
+    bool OldSRGB = Texture->SRGB;
 
-    UTexture2D* Texture = CreateImageTexture(Width, Height);
-
-    // Lock the texture so it can be modified
-    void* textureData = Texture->GetPlatformData()->Mips[0].BulkData.Lock(LOCK_READ_WRITE);
-
-    // Copy the pixels to the texture
-    FMemory::Memcpy(textureData, PixelArray.GetData(), PixelArray.Num()*sizeof(FColor));
-
-    // Unlock the texture
-    Texture->GetPlatformData()->Mips[0].BulkData.Unlock();
-
-    // Update the texture and mark it as ready for use
+    Texture->CompressionSettings = TextureCompressionSettings::TC_VectorDisplacementmap;
+    Texture->MipGenSettings = TextureMipGenSettings::TMGS_NoMipmaps;
+    Texture->SRGB = false;
     Texture->UpdateResource();
 
-    return Texture;
-} 
-
-void UImageBPLibrary::CreatePixelArrayFromTexture(UTexture2D* Texture2D, TArray<FColor> &PixelArray)
-{
-
-    TextureCompressionSettings OldCompressionSettings = Texture2D->CompressionSettings;
-    TextureMipGenSettings OldMipGenSettings = Texture2D->MipGenSettings;
-    bool OldSRGB = Texture2D->SRGB;
-
-    Texture2D->CompressionSettings = TextureCompressionSettings::TC_VectorDisplacementmap;
-    Texture2D->MipGenSettings = TextureMipGenSettings::TMGS_NoMipmaps;
-    Texture2D->SRGB = false;
-    Texture2D->UpdateResource();
-
-    FTexture2DMipMap& mipmap = Texture2D->PlatformData->Mips[0];
+    FTexture2DMipMap& mipmap = Texture->GetPlatformData()->Mips[0];
     uint8* Data = (uint8*)mipmap.BulkData.Lock(LOCK_READ_WRITE);
     if (Data == nullptr)
     {
         mipmap.BulkData.Unlock();
-        Texture2D->UpdateResource();
+        Texture->UpdateResource();
 
         UE_LOG(LogTemp, Warning, TEXT("Error: empty data pointer of texture."));
     }
 
-    int width = Texture2D->PlatformData->SizeX;
-    int height = Texture2D->PlatformData->SizeY;
+    int width = Texture->GetPlatformData()->SizeX;
+    int height = Texture->GetPlatformData()->SizeY;
     for (int32 y = 0; y < height; y++)
     {
         for (int32 x = 0; x < width; x++)
@@ -77,6 +55,29 @@ void UImageBPLibrary::CreatePixelArrayFromTexture(UTexture2D* Texture2D, TArray<
 
 }
 
+
+void UImageBPLibrary::ConvertPixelArrayToTexture(TArray<FColor>& PixelArray, UTexture2D*& Texture, int Width, int Height)
+{
+
+    check(PixelArray.Num() == Width * Height);
+
+    Texture = CreateImageTexture(Width, Height);
+
+    // Lock the texture so it can be modified
+    void* textureData = Texture->GetPlatformData()->Mips[0].BulkData.Lock(LOCK_READ_WRITE);
+
+    // Copy the pixels to the texture
+    FMemory::Memcpy(textureData, PixelArray.GetData(), PixelArray.Num()*sizeof(FColor));
+
+    // Unlock the texture
+    Texture->GetPlatformData()->Mips[0].BulkData.Unlock();
+
+    // Update the texture and mark it as ready for use
+    Texture->UpdateResource();
+
+}
+
+
 bool UImageBPLibrary::ExportImage(UTexture2D* Texture2D, const FString& Path)
 {
 
@@ -89,7 +90,7 @@ bool UImageBPLibrary::ExportImage(UTexture2D* Texture2D, const FString& Path)
     Texture2D->SRGB = false;
     Texture2D->UpdateResource();
 
-    FTexture2DMipMap& mipmap = Texture2D->PlatformData->Mips[0];
+    FTexture2DMipMap& mipmap = Texture2D->GetPlatformData()->Mips[0];
     uint8* Data = (uint8*)mipmap.BulkData.Lock(LOCK_READ_WRITE);
     if (Data == nullptr)
     {
@@ -98,8 +99,8 @@ bool UImageBPLibrary::ExportImage(UTexture2D* Texture2D, const FString& Path)
         return false;
     }
 
-    int width = Texture2D->PlatformData->SizeX;
-    int height = Texture2D->PlatformData->SizeY;
+    int width = Texture2D->GetPlatformData()->SizeX;
+    int height = Texture2D->GetPlatformData()->SizeY;
     TArray<FColor> nColors;
 
     for (int32 y = 0; y < height; y++)
@@ -124,7 +125,7 @@ bool UImageBPLibrary::ExportImage(UTexture2D* Texture2D, const FString& Path)
     Texture2D->UpdateResource();
 
     TArray<uint8> ImgData;
-    FImageUtils::CompressImageArray(width, height, nColors, ImgData);
+    FImageUtils::ThumbnailCompressImageArray(width, height, nColors, ImgData);
     return FFileHelper::SaveArrayToFile(ImgData, *Path);
 
 }
