@@ -36,8 +36,9 @@ public:
     float* GetBone(int i);
     float* GetQuat(int i);
 
-    int GetNumFacialCtrlParams();
-    void GetFacialCtrlParams(TArray<float> &params);
+    const int GetMpPoseNumBones();
+    float* GetMpPoseBone(int i);
+
 
 private:
 
@@ -57,8 +58,9 @@ private:
     typedef float* (*GetBoneT)(int i);
     typedef float* (*GetQuatT)(int i);
 
-    typedef int (*GetNumFacialCtrlParamsT)();
-    typedef float* (*GetFacialCtrlParamsT)();
+    typedef const int (*GetMpPoseNumBonesT)();
+    typedef float* (*GetMpPoseBoneT)(int i);
+
 
     InitT mInit = NULL;
     FinalizeT mFinalize = NULL;
@@ -72,7 +74,10 @@ private:
     GetBoneT mGetBone = NULL;
     GetQuatT mGetQuat = NULL;
 
-    GetNumFacialCtrlParamsT mGetNumFacialCtrlParams = NULL;
-    GetFacialCtrlParamsT mGetFacialCtrlParams = NULL;
+    GetMpPoseNumBonesT mGetMpPoseNumBones = NULL;
+    GetMpPoseBoneT mGetMpPoseBone = NULL;
+
+    TArray<float> mBones;
+    TArray<float> mQuats;
 
 };

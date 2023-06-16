@@ -56,9 +56,10 @@ void MocapMpProxy::ImportMethods() {
         mGetQuatDims = GetFuncPointer<GetQuatDimsT>(mHandle, "MocapMpGeeQuatDims");
         mGetBone = GetFuncPointer<GetBoneT>(mHandle, "MocapMpGetBone");
         mGetQuat = GetFuncPointer<GetQuatT>(mHandle, "MocapMpGetQuat");
-        //mGetNumFacialCtrlParams = GetFuncPointer<GetNumFacialCtrlParamsT>(mHandle, "MocapMpGetNumFacialCtrlParams");
-        //mGetFacialCtrlParams = GetFuncPointer<GetFacialCtrlParamsT>(mHandle, "MocapMpGetFacialCtrlParams");
-        mFinalize = GetFuncPointer<FinalizeT>(mHandle, "MocapMpFinalize");
+
+        mGetMpPoseNumBones = GetFuncPointer<GetMpPoseNumBonesT>(mHandle, "MocapMpGetMpPoseNumBones");
+        mGetMpPoseBone = GetFuncPointer<GetMpPoseBoneT>(mHandle, "MocapMpGetMpPoseBone");
+
     }
 
 }
@@ -184,37 +185,28 @@ float* MocapMpProxy::GetQuat(int i) {
 
 }
 
+const int MocapMpProxy::GetMpPoseNumBones() {
 
-
-/*
-int MocapMpProxy::GetNumFacialCtrlParams() {
-
-    int num;
-    if (mGetNumFacialCtrlParams != NULL) {
-        num = mGetNumFacialCtrlParams();
+    if (mGetMpPoseNumBones != NULL) {
+        return mGetMpPoseNumBones();
     }
     else {
-        UE_LOG(LogTemp, Warning, TEXT("Error: mGetNumFacialCtrlParams is NULL."));
-    }
-    return num;
-
-}
-
-void MocapMpProxy::GetFacialCtrlParams(TArray<float> &params) {
-
-    float* ptr = NULL;
-    int i;
-
-    if (mGetFacialCtrlParams != NULL) {
-
-        ptr = mGetFacialCtrlParams();
-        for (i = 0; i < params.Num(); i++) {
-            params[i] = ptr[i];
-        }
-
-    } else {
-        UE_LOG(LogTemp, Warning, TEXT("Error: mGetFacialCtrlParams is NULL."));
+        UE_LOG(LogTemp, Warning, TEXT("Error: mGetMpPoseNumBones is NULL."));
+        return -1;
     }
 
 }
-*/
+
+float* MocapMpProxy::GetMpPoseBone(int i) {
+
+    float* bone;
+    if (mGetMpPoseBone != NULL) {
+        bone = mGetMpPoseBone(i);
+    }
+    else {
+        UE_LOG(LogTemp, Warning, TEXT("Error: mGetMpPoseBone is NULL."));
+        bone = NULL;
+    }
+
+    return bone;
+}

@@ -279,6 +279,9 @@ private:
 	UTexture2D* mImageTexture = nullptr;
 	UTexture2D* mDiagTexture = nullptr;
 
+	const int mWidthTarget = 640;
+	const int mHeightTarget = 480;
+
 	MocapMpProxy mMocap = MocapMpProxy();
 
 	bool mCanLoadMocapLibrary = false;

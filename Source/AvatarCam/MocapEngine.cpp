@@ -80,18 +80,17 @@ void AMocapEngine::Process() {
 	// Motion capture 
 	if (mCanLoadMocapLibrary) {
 
-	    //UPrintBPLibrary::PrintInt("Width: ", ImageWidth);
-	    //UPrintBPLibrary::PrintInt("Height: ", ImageHeight);
 		bool bIsEmpty = mImage.empty();
-	    //UPrintBPLibrary::PrintBool("is empty: ", bIsEmpty);
-		// Image
+		if (bIsEmpty) return;
 
-		// Convert data into image.
-		//ConvertDataToImage(mData, mImage);
 		ConvertTextureToCvMat(mImageTexture, mImage);
+		//ConvertDataToImage(mData, mImage);
+
+		// Preprocess 
+	    cv::cvtColor(mImage, image, cv::COLOR_BGRA2BGR);
+        cv::resize(image, image, cv::Size(mWidthTarget, mHeightTarget));
 
 		// Detection
-	    cv::cvtColor(mImage, image, cv::COLOR_BGRA2BGR);
 		mMocap.Detect(image);
 
 		// Update bones and quats
@@ -130,15 +129,14 @@ void AMocapEngine::Diagnostic() {
 
 	mImageDiag = mImage.clone();
 
-	//AppendAlphaChannel(mImage, mImageDiag);
+	cv::circle(mImageDiag, cv::Point(320, 240), 3, cv::Scalar(255, 0, 0), 3);
 
-	//cv::circle(mImageDiag, cv::Point(320, 240), 3, cv::Scalar(255, 0, 0), 3);
+	ConvertCvMatToTexture(mImageDiag, mDiagTexture);
+	//mDiagTexture = FOpenCVHelper::TextureFromCvMat(mImageDiag);
 
-	//ConvertCvMatToTexture(mImageDiag, mDiagTexture);
-	mDiagTexture = FOpenCVHelper::TextureFromCvMat(mImageDiag);
 }
 
-void AMocapEngine::ConvertTextureToCvMat(UTexture2D* &Texture, cv::Mat &M) {
+void AMocapEngine::ConvertTextureToCvMat(UTexture2D* &Texture, cv::Mat &Mat) {
 
 	if (Texture == nullptr) {
 		UE_LOG(LogTemp, Error, TEXT("Texture is nullptr."));
@@ -157,19 +155,19 @@ void AMocapEngine::ConvertTextureToCvMat(UTexture2D* &Texture, cv::Mat &M) {
 	int32 Width = Mip.SizeX, Height = Mip.SizeY;
 
 	// Create a Mat
-	M = cv::Mat(Height, Width, CV_8UC4, Data);
+	Mat = cv::Mat(Height, Width, CV_8UC4, Data);
 
 	// Unlock data
 	Mip.BulkData.Unlock();
 
 	// Convert BGRA to BGR
-	cv::cvtColor(M, M, cv::COLOR_BGRA2BGR);
+	//cv::cvtColor(Mat, Mat, cv::COLOR_BGRA2BGR);
 
 }
 
-void AMocapEngine::ConvertCvMatToTexture(cv::Mat &M, UTexture2D* &Texture) {
+void AMocapEngine::ConvertCvMatToTexture(cv::Mat &Mat, UTexture2D* &Texture) {
 
-	Texture = FOpenCVHelper::TextureFromCvMat(M);
+	Texture = FOpenCVHelper::TextureFromCvMat(Mat);
 
 }
 
