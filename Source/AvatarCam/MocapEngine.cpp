@@ -94,30 +94,15 @@ void AMocapEngine::Process() {
 		mMocap.Detect(image);
 
 		// Update bones and quats
-		float* pBone;
-		float* pQuat;
-		for (int i = 0; i < mNumBones; i++) {
+		mBones = mMocap.GetBones();
+		mQuats = mMocap.GetQuats();
 
-			pBone = mMocap.GetBone(i);
-			pQuat = mMocap.GetQuat(i);
+		mMpPoseBones = mMocap.GetMpPoseBones();
+		mMpPoseBones = ToPixelSpace(mMpPoseBones, mWidthTarget, mHeightTarget);
 
-			mBones[i].X = pBone[0];
-			mBones[i].Y = pBone[1];
-			mBones[i].Z = pBone[2];
-
-			mQuats[i].W = pQuat[0];
-			mQuats[i].X = pQuat[1];
-			mQuats[i].Y = pQuat[2];
-			mQuats[i].Z = pQuat[3];
-
-		}
-
-		int iRightWrist = 15;
-		FVector rightWrist = mBones[iRightWrist];
-	    UPrintBPLibrary::PrintVector("RightWrist: ", rightWrist);
-
-		FString baseDir = FPlatformProcess::BaseDir();
-	    UPrintBPLibrary::PrintString("baseDir: ", baseDir);
+		//int iRightWrist = 15;
+		//FVector rightWrist = mBones[iRightWrist];
+	    //UPrintBPLibrary::PrintVector("RightWrist: ", rightWrist);
 
 		// Perform diagnostics 
 		Diagnostic();
@@ -130,6 +115,9 @@ void AMocapEngine::Diagnostic() {
 	mImageDiag = mImage.clone();
 
 	cv::circle(mImageDiag, cv::Point(320, 240), 3, cv::Scalar(255, 0, 0), 3);
+
+
+	CvPlotLibrary::PlotMpPose2d(mImageDiag, mMpPoseBones);
 
 	ConvertCvMatToTexture(mImageDiag, mDiagTexture);
 	//mDiagTexture = FOpenCVHelper::TextureFromCvMat(mImageDiag);
@@ -159,9 +147,6 @@ void AMocapEngine::ConvertTextureToCvMat(UTexture2D* &Texture, cv::Mat &Mat) {
 
 	// Unlock data
 	Mip.BulkData.Unlock();
-
-	// Convert BGRA to BGR
-	//cv::cvtColor(Mat, Mat, cv::COLOR_BGRA2BGR);
 
 }
 
@@ -317,6 +302,34 @@ cv::Mat AMocapEngine::CreateMatFromTexture(UTexture2D* Texture) {
 	return Mat;
 }
 
+TArray<FVector> AMocapEngine::ToPixelSpace(TArray<FVector> &Pose, int Width, int Height) {
+
+	TArray<FVector> poseOut;
+	int num = Pose.Num();
+
+	poseOut.SetNum(num);
+	for (int i = 0; i < num; i++) {
+		poseOut[i][0] = Pose[i][0] * Width;
+		poseOut[i][1] = Pose[i][1] * Height;
+	}
+
+	return poseOut;
+
+}
+
+TArray<FVector> AMocapEngine::ToNormSpace(TArray<FVector> &Pose, int Width, int Height) {
+
+	TArray<FVector> poseOut;
+	int num = Pose.Num();
+
+	for (int i = 0; i < num; i++) {
+		poseOut[i][0] = Pose[i][0] / Width;
+		poseOut[i][1] = Pose[i][1] / Height;
+	}
+
+	return poseOut;
+
+}
 
 
 

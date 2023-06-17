@@ -41,12 +41,18 @@ public:
 
     void AppendAlphaChannel(cv::Mat& Src, cv::Mat& Dst);
 
+	/*
+	*/
 	cv::Mat CreateMatFromTexture(UTexture2D* Texture);
 	void ConvertDataToImage(TArray<FColor>& Data, cv::Mat& Image);
 	void RadianToDegree(float Radian, float& Degree);
 	void DegreeToRadian(float Degree, float& Radian);
 	void MakeAngleAxis(float Angle, FVector Axis, FVector4& AngleAxis);
 	void QuatToAngleAxis(FQuat Quat, FVector4& AngleAxis);
+
+	TArray<FVector> ToPixelSpace(TArray<FVector> &Pose, int Width, int Height);
+	TArray<FVector> ToNormSpace(TArray<FVector> &Pose, int Width, int Height);
+
 
 	// Parameters
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = MocapEngine)
@@ -291,6 +297,8 @@ private:
 	int mNumBones = -1;
 	TArray<FVector> mBones;
 	TArray<FQuat> mQuats;
+
+	TArray<FVector> mMpPoseBones;
 
 	// Facial control parameters
 	TArray<float> mFacialCtrlParams;

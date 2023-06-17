@@ -10,6 +10,8 @@
 #include <ThirdParty/OpenCV/include/opencv2/core.hpp>
 #include "PostOpenCVHeaders.h"
 
+#include "CvPlotLibrary.h"
+
 #include "CoreMinimal.h"
 
 /**
@@ -18,8 +20,8 @@
 class AVATARCAM_API MocapMpProxy
 {
 public:
-	MocapMpProxy();
-	~MocapMpProxy();
+    MocapMpProxy();
+    ~MocapMpProxy();
 
     bool LoadLibrary(FString filePath);
     void FreeLibrary();
@@ -39,8 +41,13 @@ public:
     const int GetMpPoseNumBones();
     float* GetMpPoseBone(int i);
 
+    TArray<FVector> GetBones();
+    TArray<FQuat> GetQuats();
+
+    TArray<FVector> GetMpPoseBones();
 
 private:
+
 
     // Library handle 
     void* mHandle = NULL;
@@ -77,7 +84,6 @@ private:
     GetMpPoseNumBonesT mGetMpPoseNumBones = NULL;
     GetMpPoseBoneT mGetMpPoseBone = NULL;
 
-    TArray<float> mBones;
-    TArray<float> mQuats;
+    // Auxillary methods
 
 };

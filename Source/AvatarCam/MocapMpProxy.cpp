@@ -210,3 +210,69 @@ float* MocapMpProxy::GetMpPoseBone(int i) {
 
     return bone;
 }
+
+TArray<FVector> MocapMpProxy::GetBones() {
+
+    const int num = GetNumBones();
+    TArray<FVector> bones;
+    
+    bones.SetNum(num);
+    float* pBone;
+    for (int i = 0; i < num; i++) {
+
+        pBone = GetBone(i);
+
+        bones[i].X = pBone[0];
+        bones[i].Y = pBone[1];
+        bones[i].Z = pBone[2];
+
+    }
+
+    return bones;
+
+}
+
+TArray<FQuat> MocapMpProxy::GetQuats() {
+
+    const int num = GetNumBones();
+    TArray<FQuat> quats;
+    
+    quats.SetNum(num);
+    float* pQuat;
+    for (int i = 0; i < num; i++) {
+
+        pQuat = GetQuat(i);
+
+        quats[i].W = pQuat[0];
+        quats[i].X = pQuat[1];
+        quats[i].Y = pQuat[2];
+        quats[i].Z = pQuat[3];
+
+    }
+
+    return quats;
+
+}
+
+
+TArray<FVector> MocapMpProxy::GetMpPoseBones() {
+
+    const int num = GetMpPoseNumBones();
+    TArray<FVector> bones;
+    
+    bones.SetNum(num);
+    float* pBone;
+    for (int i = 0; i < num; i++) {
+
+        pBone = GetMpPoseBone(i);
+
+        bones[i].X = pBone[0];
+        bones[i].Y = pBone[1];
+        bones[i].Z = pBone[2];
+
+    }
+
+    return bones;
+
+}
+

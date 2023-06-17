@@ -78,7 +78,7 @@ void UImageBPLibrary::ConvertPixelArrayToTexture(TArray<FColor>& PixelArray, UTe
 }
 
 
-bool UImageBPLibrary::ExportImage(UTexture2D* Texture2D, const FString& Path)
+bool UImageBPLibrary::ExportImage(UTexture2D* Texture2D, const FString& Filepath)
 {
 
     TextureCompressionSettings OldCompressionSettings = Texture2D->CompressionSettings;
@@ -126,6 +126,6 @@ bool UImageBPLibrary::ExportImage(UTexture2D* Texture2D, const FString& Path)
 
     TArray<uint8> ImgData;
     FImageUtils::ThumbnailCompressImageArray(width, height, nColors, ImgData);
-    return FFileHelper::SaveArrayToFile(ImgData, *Path);
+    return FFileHelper::SaveArrayToFile(ImgData, *Filepath);
 
 }

@@ -28,6 +28,6 @@ public:
         static void ConvertPixelArrayToTexture(TArray<FColor> &PixelArray, UTexture2D* &Texture, int Width, int Height);
 
 	UFUNCTION(BlueprintCallable, Category = "ImageBPLibrary")
-        static bool ExportImage(UTexture2D* Texture2D, const FString& Path);
+        static bool ExportImage(UTexture2D* Texture2D, const FString& Filepath);
 
 };
