@@ -82,6 +82,9 @@ public:
 		FString GetEngineName();
 
 	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		void GetMocapData(TArray<FVector>& Bones, TArray<FQuat>& Quats, TArray<float>& FacialCtrlParams);
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
 		void GetBones(TArray<FVector>& Bones);
 
 	UFUNCTION(BlueprintPure, Category = "MocapEngine")

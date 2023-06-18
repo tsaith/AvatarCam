@@ -114,13 +114,8 @@ void AMocapEngine::Diagnostic() {
 
 	mImageDiag = mImage.clone();
 
-	cv::circle(mImageDiag, cv::Point(320, 240), 3, cv::Scalar(255, 0, 0), 3);
-
-
 	CvPlotLibrary::PlotMpPose2d(mImageDiag, mMpPoseBones);
-
 	ConvertCvMatToTexture(mImageDiag, mDiagTexture);
-	//mDiagTexture = FOpenCVHelper::TextureFromCvMat(mImageDiag);
 
 }
 
@@ -191,16 +186,25 @@ FString AMocapEngine::GetEngineName() {
 	return mEngineName;
 }
 
+void AMocapEngine::GetMocapData(TArray<FVector>& Bones, TArray<FQuat>& Quats,
+	TArray<float>& FacialCtrlParams) {
 
-void AMocapEngine::GetBones(TArray<FVector>& Bones) {
+	Bones = mBones;
+	Quats = mQuats;
+	FacialCtrlParams = mFacialCtrlParams;
+
+}
+
+
+void AMocapEngine::GetBones(TArray<FVector> &Bones) {
 	Bones = mBones;
 }
 
-void AMocapEngine::GetQuats(TArray<FQuat>& Quats) {
+void AMocapEngine::GetQuats(TArray<FQuat> &Quats) {
 	Quats = mQuats;
 }
 
-void AMocapEngine::GetData(TArray<FColor>& Data) {
+void AMocapEngine::GetData(TArray<FColor> &Data) {
 	Data = mData;
 }
 
@@ -214,7 +218,7 @@ void AMocapEngine::GetDiagTexture(UTexture2D* &DiagTexture)
 	DiagTexture = mDiagTexture;
 }
 
-void AMocapEngine::ConvertDataToImage(TArray<FColor>& Data, cv::Mat& Image) {
+void AMocapEngine::ConvertDataToImage(TArray<FColor> &Data, cv::Mat &Image) {
 
 	uchar* p = Image.data;
 	const int numChannels = 4;
@@ -237,20 +241,20 @@ void AMocapEngine::ConvertDataToImage(TArray<FColor>& Data, cv::Mat& Image) {
 
 }
 
-void AMocapEngine::RadianToDegree(float Radian, float& Degree)
+void AMocapEngine::RadianToDegree(float Radian, float &Degree)
 {
 
 	Degree = Radian / PI * 180.0;
 
 }
 
-void AMocapEngine::DegreeToRadian(float Degree, float& Radian)
+void AMocapEngine::DegreeToRadian(float Degree, float &Radian)
 {
 
 	Radian = Degree / 180.0 * PI;
 
 }
-void AMocapEngine::MakeAngleAxis(float Angle, FVector Axis, FVector4& AngleAxis)
+void AMocapEngine::MakeAngleAxis(float Angle, FVector Axis, FVector4 &AngleAxis)
 {
 
 	AngleAxis.W = Angle;
@@ -260,7 +264,7 @@ void AMocapEngine::MakeAngleAxis(float Angle, FVector Axis, FVector4& AngleAxis)
 
 }
 
-void AMocapEngine::QuatToAngleAxis(FQuat Quat, FVector4& AngleAxis)
+void AMocapEngine::QuatToAngleAxis(FQuat Quat, FVector4 &AngleAxis)
 {
 
 	float angleRad;
