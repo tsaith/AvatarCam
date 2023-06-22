@@ -25,13 +25,13 @@ public class AvatarCam : ModuleRules
 		});
 
         // Load libmocap_mp.dll
-        string DLLName = "libmocap_mp.dll";
+        string MocapMpDLL = "libmocap_mp.dll";
 		string ProjectDirectory = Path.Combine(ModuleDirectory, "..\\..\\");
-		string DLLPath = Path.Combine(ProjectDirectory, "Libs", DLLName);
+		string MocapMpDLLPath = Path.Combine(ProjectDirectory, "Libs", MocapMpDLL);
 		//Console.WriteLine("DllPath: {0}", DLLPath);
 
-		PublicDelayLoadDLLs.Add(DLLName);
-        RuntimeDependencies.Add(DLLPath);
+		PublicDelayLoadDLLs.Add(MocapMpDLL);
+        RuntimeDependencies.Add(MocapMpDLLPath);
 
 	}
 }

@@ -19,6 +19,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION(BlueprintPure, Category = "AvatarController")
+		bool IsDataReady();
 
 	UFUNCTION(BlueprintCallable, Category = "AvatarController")
 		void SetMocapData(TArray<FVector> Bones, TArray<FQuat> Quats, TArray<float> FacialCtrlParams);

@@ -23,6 +23,9 @@ void AAvatarController::Tick(float DeltaTime)
 
 }
 
+bool AAvatarController::IsDataReady() {
+	return !mQuats.IsEmpty();
+}
 
 void AAvatarController::SetMocapData(TArray<FVector> Bones, TArray<FQuat> Quats,
 	TArray<float> FacialCtrlParams) {
