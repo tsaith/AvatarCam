@@ -21,7 +21,7 @@ public class AvatarCam : ModuleRules
 			"HeadMountedDisplay", "EnhancedInput",
 			"ImageWrapper", "RenderCore",
 			"OpenCV", "OpenCVHelper",
-			"VideoReader",
+			"VideoReader"
 		});
 
         // Load libmocap_mp.dll

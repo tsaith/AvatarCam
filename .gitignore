@@ -5,6 +5,15 @@
 # Temporary files of documentation
 _build/
 
+# Shipping
+Shipping/*
+
+# Plugins
+Plugins/VRM4U/*
+
+# Character models
+Content/Characters/Alice/*
+
 # Weights
 *.weights
 *.h5

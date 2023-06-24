@@ -184,7 +184,7 @@ void AMocapEngine::SetEngineName(FString EngineName) {
 
 FString AMocapEngine::GetEngineName() {
 	return mEngineName;
-}
+} 
 
 void AMocapEngine::GetMocapData(TArray<FVector>& Bones, TArray<FQuat>& Quats,
 	TArray<float>& FacialCtrlParams) {
