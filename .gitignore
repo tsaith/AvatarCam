@@ -12,7 +12,7 @@ Shipping/*
 Plugins/VRM4U/*
 
 # Character models
-Content/Characters/Alice/*
+Content/Characters/*/Assets/*
 
 # Weights
 *.weights
