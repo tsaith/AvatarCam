@@ -8,14 +8,20 @@ UTexture2D* UImageBPLibrary::CreateImageTexture(int Width, int Height)
 {
     UTexture2D* Texture = UTexture2D::CreateTransient(Width, Height, PF_B8G8R8A8);
 
+    Texture->MipLoadOptions = ETextureMipLoadOptions::OnlyFirstMip;
+    Texture->LODGroup = TextureGroup::TEXTUREGROUP_UI;
+    Texture->NeverStream = true;
+
     // Ensure all settings are the way we want them
-    Texture->MipGenSettings = TMGS_NoMipmaps;
-    Texture->SRGB = false;
+    //Texture->MipGenSettings = TMGS_NoMipmaps;
+    //Texture->SRGB = false;
+
     Texture->UpdateResource();
 
     return Texture;
 }
 
+/*
 void UImageBPLibrary::ConvertTextureToPixelArray(UTexture2D* &Texture, TArray<FColor> &PixelArray)
 { 
 
@@ -129,3 +135,4 @@ bool UImageBPLibrary::ExportImage(UTexture2D* Texture2D, const FString& Filepath
     return FFileHelper::SaveArrayToFile(ImgData, *Filepath);
 
 }
+*/

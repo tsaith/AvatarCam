@@ -38,10 +38,6 @@
 			"Enabled": false
 		},
 		{
-			"Name": "VideoReader",
-			"Enabled": false
-		},
-		{
 			"Name": "VRM4U",
 			"Enabled": true
 		}

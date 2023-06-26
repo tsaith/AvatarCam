@@ -21,6 +21,7 @@ public:
     UFUNCTION(BlueprintPure, Category = "ImageBPLibrary")
         static UTexture2D* CreateImageTexture(int Width, int Height);
 
+    /*
     UFUNCTION(BlueprintPure, Category = "ImageBPLibrary")
         static void ConvertTextureToPixelArray(UTexture2D* &Texture, TArray<FColor>& PixelArray);
 
@@ -29,5 +30,6 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "ImageBPLibrary")
         static bool ExportImage(UTexture2D* Texture2D, const FString& Filepath);
+    */
 
 };
