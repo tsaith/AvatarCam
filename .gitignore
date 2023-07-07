@@ -9,7 +9,11 @@ _build/
 Shipping/*
 
 # Plugins
-Plugins/VRM4U/*
+Plugins/*/Binaries/*
+Plugins/*/Intermediate/*
+Plugins/*/ThirdParty/*
+
+#Plugins/VRM4U/*
 
 # Character models
 Content/Characters/*/Assets/*
