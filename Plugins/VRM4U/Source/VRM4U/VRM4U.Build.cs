@@ -12,7 +12,7 @@ public class VRM4U : ModuleRules
 
     private string ThirdPartyPath
     {
-        get { return Path.GetFullPath(Path.Combine(ModulePath, "../../ThirdParty/")); }
+        get { return Path.GetFullPath(Path.Combine(ModulePath, "../../ThirdParty")); }
     }
 
     public VRM4U(ReadOnlyTargetRules Target) : base(Target)

@@ -9,7 +9,7 @@
 			"Type": "Runtime",
 			"LoadingPhase": "Default",
 			"AdditionalDependencies": [
-				"Engine"
+				"Engine", 
 			]
 		}
 	],
@@ -36,6 +36,10 @@
 		{
 			"Name": "MocapMp",
 			"Enabled": false
+		},
+		{
+			"Name": "NvAR4U",
+			"Enabled": true 
 		},
 		{
 			"Name": "VRM4U",

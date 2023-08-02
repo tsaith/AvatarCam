@@ -13,8 +13,6 @@ Plugins/*/Binaries/*
 Plugins/*/Intermediate/*
 Plugins/*/ThirdParty/*
 
-#Plugins/VRM4U/*
-
 # Character models
 Content/Characters/*/Assets/*
 
@@ -23,30 +21,6 @@ Content/Characters/*/Assets/*
 *.h5
 *.pth
 
-# Temporary files
-.idea/
-.cache/
-__pycache__/
-build/
-static/
-dist/
-tmp/
-run/
-templates/index.html
-wrap.cpp
-*.o
-*.lock
-*.pyc
-*.swp
-*.bak
-*#
-.*#
-*~
-.DS_Store
-._.DS_Store
-yarn-error.log
-yarn.lock
-
 # Bazel
 bazel-*
 
@@ -54,17 +28,19 @@ bazel-*
 *.log
 
 # Image files
+Images/*
 *.png
 *.jpg
 *.jpeg
 
 # Video
+Videos/*
 *.mp4
 *.avi
 *.webm
 
 # Data files
-data/
+Data/*
 *.raw
 *.dat
 *.hdf
@@ -73,31 +49,32 @@ data/
 
 
 # Compiled lib.
-*.so
-*.dll
-*.a
+Libs/*
 
 
 # Binary
 *.run
 bin/
 
+
+
 # Unreal
-Binaries/
-Intermediate/
+Binaries/*
+Intermediate/*
+ThirdParty/*
 #Saved/
 Saved/
-#ThirdParty
-#Libs/
-__ExternalActors__/
+#__ExternalActors__/
+
+UnrealEditor*.dll
 
 # Outputs
-Outputs/
+Outputs/*
 *.out
 
 # Visual Studio
 .vs/
 *.sln
 *.vcxproj*
-x64/
+x64/*
 

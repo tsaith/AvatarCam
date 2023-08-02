@@ -5,15 +5,15 @@
 #include "PreOpenCVHeaders.h"  
 #include "OpenCVHelper.h"
 #include <ThirdParty/OpenCV/include/opencv2/opencv.hpp>
-//#include <ThirdParty/OpenCV/include/opencv2/imgproc.hpp>
-//#include <ThirdParty/OpenCV/include/opencv2/highgui/highgui.hpp>
-//#include <ThirdParty/OpenCV/include/opencv2/core.hpp>
 #include "PostOpenCVHeaders.h"
 
 #include "MocapMpProxy.h"
-#include "PrintBPLibrary.h"
+#include "NvFacialExpression.h"
 
 #include "Math/UnrealMathUtility.h"
+
+#include "PrintBPLibrary.h"
+
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "MocapEngine.generated.h"
@@ -41,8 +41,6 @@ public:
 
     void AppendAlphaChannel(cv::Mat& Src, cv::Mat& Dst);
 
-	/*
-	*/
 	cv::Mat CreateMatFromTexture(UTexture2D* Texture);
 	void ConvertDataToImage(TArray<FColor>& Data, cv::Mat& Image);
 	void RadianToDegree(float Radian, float& Degree);
@@ -306,5 +304,9 @@ private:
 	// Facial control parameters
 	TArray<float> mFacialCtrlParams;
 
+	// Facial expression
+	NvFacialExpression mFacialExpression = NvFacialExpression();
+	bool mIsFaceDetected = false;
+	TArray<float> mBlendshapes;
 
 };

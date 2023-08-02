@@ -37,6 +37,9 @@ AMocapEngine::AMocapEngine()
 	// Facial control parameters
 	//mFacialCtrlParams.SetNum(mMocap.GetNumFacialCtrlParams());
 
+	// Facial expression
+	mFacialExpression.Init(ImageWidth, ImageHeight);
+
 
 }
 
@@ -77,6 +80,9 @@ void AMocapEngine::Process() {
 	cv::Mat image;
 	cv::Mat imageDebug;
 
+	bool bIsFaceDetected = false;
+	TArray<float> blendshapes;
+
 	// Motion capture 
 	if (mCanLoadMocapLibrary) {
 
@@ -90,8 +96,19 @@ void AMocapEngine::Process() {
 	    cv::cvtColor(mImage, image, cv::COLOR_BGRA2BGR);
         cv::resize(image, image, cv::Size(mWidthTarget, mHeightTarget));
 
-		// Detection
+		// Motion capture
 		mMocap.Detect(image);
+
+		// Facial expression
+		mFacialExpression.Detect(image);
+		mIsFaceDetected = mFacialExpression.IsFaceDetected();
+		mBlendshapes = mFacialExpression.GetBlendshapes();
+
+		msg = FString::Printf(TEXT("mIsFace|Detected: %d"), mIsFaceDetected);
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, *msg);
+
+		msg = FString::Printf(TEXT("jawOpen: %f"), mBlendshapes[24]);
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, *msg);
 
 		// Update bones and quats
 		mBones = mMocap.GetBones();
