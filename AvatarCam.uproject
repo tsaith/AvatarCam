@@ -9,7 +9,7 @@
 			"Type": "Runtime",
 			"LoadingPhase": "Default",
 			"AdditionalDependencies": [
-				"Engine", 
+				"Engine" 
 			]
 		}
 	],
@@ -22,10 +22,6 @@
 			]
 		},
 		{
-			"Name": "MyPluging",
-			"Enabled": false
-		},
-		{
 			"Name": "OpenCVCustomized",
 			"Enabled": false
 		},
@@ -34,12 +30,12 @@
 			"Enabled": true
 		},
 		{
-			"Name": "MocapMp",
-			"Enabled": false
-		},
-		{
 			"Name": "NvAR4U",
 			"Enabled": true 
+		},
+		{
+			"Name": "MocapMp",
+			"Enabled": false
 		},
 		{
 			"Name": "VRM4U",

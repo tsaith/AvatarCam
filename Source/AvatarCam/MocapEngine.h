@@ -80,7 +80,20 @@ public:
 		FString GetEngineName();
 
 	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		void GetMocapData(TArray<FVector>& Bones, TArray<FQuat>& Quats, TArray<float>& FacialCtrlParams);
+		bool IsFaceDetected();
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		TArray<float> GetBlendshapes();
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		FQuat GetHeadQuat();
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		FVector GetHeadTranslation();
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		void GetMocapData(TArray<float>& Blendshapes,
+			TArray<FVector>& Bones, TArray<FQuat>& Quats);
 
 	UFUNCTION(BlueprintPure, Category = "MocapEngine")
 		void GetBones(TArray<FVector>& Bones);
@@ -289,6 +302,10 @@ private:
 	const int mWidthTarget = 640;
 	const int mHeightTarget = 480;
 
+	// Facial expression
+	NvFacialExpression mFacialExpression = NvFacialExpression();
+
+	// Mocap of Mediapipe
 	MocapMpProxy mMocap = MocapMpProxy();
 
 	bool mCanLoadMocapLibrary = false;
@@ -301,12 +318,5 @@ private:
 
 	TArray<FVector> mMpPoseBones;
 
-	// Facial control parameters
-	TArray<float> mFacialCtrlParams;
-
-	// Facial expression
-	NvFacialExpression mFacialExpression = NvFacialExpression();
-	bool mIsFaceDetected = false;
-	TArray<float> mBlendshapes;
 
 };

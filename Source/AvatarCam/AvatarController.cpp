@@ -27,21 +27,21 @@ bool AAvatarController::IsDataReady() {
 	return !mQuats.IsEmpty();
 }
 
-void AAvatarController::SetMocapData(TArray<FVector> Bones, TArray<FQuat> Quats,
-	TArray<float> FacialCtrlParams) {
+void AAvatarController::SetMocapData(TArray<float> Blendshapes,
+	TArray<FVector> Bones, TArray<FQuat> Quats) {
 
+	mBlendshapes = Blendshapes;
 	mBones = Bones;
 	mQuats = Quats;
-	mFacialCtrlParams = FacialCtrlParams;
 
 }
 
-void AAvatarController::GetMocapData(TArray<FVector>& Bones, TArray<FQuat>& Quats,
-	TArray<float>& FacialCtrlParams) {
+void AAvatarController::GetMocapData(TArray<float>& Blendshapes, 
+	TArray<FVector>& Bones, TArray<FQuat>& Quats) {
 
+	Blendshapes = mBlendshapes;
 	Bones = mBones;
 	Quats = mQuats;
-	FacialCtrlParams = mFacialCtrlParams;
 
 }
 

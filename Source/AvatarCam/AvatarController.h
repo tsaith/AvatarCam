@@ -23,10 +23,12 @@ public:
 		bool IsDataReady();
 
 	UFUNCTION(BlueprintCallable, Category = "AvatarController")
-		void SetMocapData(TArray<FVector> Bones, TArray<FQuat> Quats, TArray<float> FacialCtrlParams);
+		void SetMocapData(TArray<float> Blendshapes,
+            TArray<FVector> Bones, TArray<FQuat> Quats);
 
 	UFUNCTION(BlueprintPure, Category = "AvatarController")
-		void GetMocapData(TArray<FVector>& Bones, TArray<FQuat>& Quats, TArray<float>& FacialCtrlParams);
+		void GetMocapData(TArray<float>& Blendshapes, 
+            TArray<FVector>& Bones, TArray<FQuat>& Quats);
 
     UFUNCTION(BlueprintPure, Category = "AvatarController")
         void GetBones(TArray<FVector>& Bones);
@@ -246,9 +248,9 @@ protected:
 
 private:
  
+	TArray<float> mBlendshapes;
 	TArray<FVector> mBones;
 	TArray<FQuat> mQuats;
-	TArray<float> mFacialCtrlParams;
 
     const int mIPelvis = 0;
     const int mISpine01 = 1;
