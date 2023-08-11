@@ -18,8 +18,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "PrintBPLibrary")
 	static void PrintMessage(FString Msg, bool ToScreen=true, bool ToLog=true);
 
+	/*
 	UFUNCTION(BlueprintCallable, Category = "PrintBPLibrary")
 	static void PrintString(FString Msg, FString S, bool ToScreen = true, bool ToLog = true);
+	*/
 
 	UFUNCTION(BlueprintCallable, Category = "PrintBPLibrary")
 	static void PrintBool(FString Msg, bool Input, bool ToScreen = true, bool ToLog = true);

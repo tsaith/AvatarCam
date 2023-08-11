@@ -8,12 +8,14 @@ void UPrintBPLibrary::PrintMessage(FString Msg, bool ToScreen, bool ToLog) {
 
 }
 
+/*
 void UPrintBPLibrary::PrintString(FString Msg, FString S, bool ToScreen, bool ToLog) {
 
 	Msg += S;
 	PrintMessage(Msg, ToScreen, ToLog);
 
 }
+*/
 
 void UPrintBPLibrary::PrintBool(FString Msg, bool Input, bool ToScreen, bool ToLog) {
 

@@ -129,7 +129,7 @@ void AMocapEngine::Diagnostic() {
 
 	mImageDiag = mImage.clone();
 
-	CvPlotLibrary::PlotMpPose2d(mImageDiag, mMpPoseBones);
+	//CvPlotLibrary::PlotMpPose2d(mImageDiag, mMpPoseBones);
 	ConvertCvMatToTexture(mImageDiag, mDiagTexture);
 
 }

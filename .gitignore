@@ -14,7 +14,8 @@ Plugins/*/Intermediate/*
 Plugins/*/ThirdParty/*
 
 # Character models
-Content/Characters/*/Assets/*
+Content/Characters/*
+#Content/Characters/*/Assets/*
 
 # Weights
 *.weights

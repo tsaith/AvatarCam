@@ -45,6 +45,10 @@ void AAvatarController::GetMocapData(TArray<float>& Blendshapes,
 
 }
 
+void AAvatarController::GetBlendshapes(TArray<float>& Blendshapes) {
+	Blendshapes = mBlendshapes;
+}
+
 void AAvatarController::GetBones(TArray<FVector>& Bones) {
 	Bones = mBones;
 }

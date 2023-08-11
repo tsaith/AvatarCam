@@ -31,6 +31,9 @@ public:
             TArray<FVector>& Bones, TArray<FQuat>& Quats);
 
     UFUNCTION(BlueprintPure, Category = "AvatarController")
+        void GetBlendshapes(TArray<float>& Blendshapes);
+
+    UFUNCTION(BlueprintPure, Category = "AvatarController")
         void GetBones(TArray<FVector>& Bones);
 
     UFUNCTION(BlueprintPure, Category = "AvatarController")

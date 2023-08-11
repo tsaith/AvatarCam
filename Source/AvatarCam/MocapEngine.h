@@ -7,6 +7,7 @@
 #include <ThirdParty/OpenCV/include/opencv2/opencv.hpp>
 #include "PostOpenCVHeaders.h"
 
+#include "MocapData.h"
 #include "MocapMpProxy.h"
 #include "NvFacialExpression.h"
 
@@ -69,6 +70,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "MocapEngine")
 		void SetImageTexture(UTexture2D* ImageTexture);
 
+	//UFUNCTION(BlueprintPure, Category = "MocapEngine")
+	    MocapData GetMocapData();
 
 	UFUNCTION(BlueprintCallable, Category = "MocapEngine")
 		void Calibrate();
@@ -110,180 +113,6 @@ public:
 	UFUNCTION(BlueprintPure, Category = "MocapEngine")
 		void GetDiagTexture(UTexture2D* &DiagTexture);
 
-	/*
-	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		int GetIPelvis();
-
-	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		int GetISpine01();
-
-	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		int GetISpine02();
-
-	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		int GetISpine03();
-
-	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		int GetINeck01();
-
-	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		int GetIHead();
-
-	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		int GetIClavicleL();
-
-	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		int GetIUpperarmL();
-
-	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		int GetILowerarmL();
-
-	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		int GetIHandL();
-
-	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		int GetIClavicleR();
-
-	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		int GetIUpperarmR();
-
-	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		int GetILowerarmR();
-
-	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		int GetIHandR();
-
-	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		int GetIThighL();
-
-	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		int GetICalfL();
-
-	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		int GetIFootL();
-
-	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		int GetIBallL();
-
-	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		int GetIThighR();
-
-	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		int GetICalfR();
-
-	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		int GetIFootR();
-
-	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		int GetIBallR();
-
-	// Left fingers
-	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		int GetIThumb01L();
-
-	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		int GetIThumb02L();
-
-	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		int GetIThumb03L();
-
-	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		int GetIIndex01L();
-
-	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		int GetIIndex02L();
-
-	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		int GetIIndex03L();
-
-	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		int GetIMiddle01L();
-
-	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		int GetIMiddle02L();
-
-	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		int GetIMiddle03L();
-
-	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		int GetIRing01L();
-
-	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		int GetIRing02L();
-
-	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		int GetIRing03L();
-
-	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		int GetIPinky01L();
-
-	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		int GetIPinky02L();
-
-	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		int GetIPinky03L();
-
-	// Right fingers
-	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		int GetIThumb01R();
-
-	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		int GetIThumb02R();
-
-	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		int GetIThumb03R();
-
-	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		int GetIIndex01R();
-
-	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		int GetIIndex02R();
-
-	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		int GetIIndex03R();
-
-	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		int GetIMiddle01R();
-
-	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		int GetIMiddle02R();
-
-	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		int GetIMiddle03R();
-
-	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		int GetIRing01R();
-
-	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		int GetIRing02R();
-
-	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		int GetIRing03R();
-
-	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		int GetIPinky01R();
-
-	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		int GetIPinky02R();
-
-	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		int GetIPinky03R();
-
-	// Facial expression
-	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		TArray<float> GetFacialCtrlParams();
-
-	// Gestures
-	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		FString GetLeftStaticGesture();
-
-	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		FString GetRightStaticGesture();
-
-	// Locomotion
-	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		bool IsSquat();
-	*/
 
 protected:
 	// Called when the game starts or when spawned
