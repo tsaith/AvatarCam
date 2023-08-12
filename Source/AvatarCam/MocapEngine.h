@@ -89,10 +89,7 @@ public:
 		TArray<float> GetBlendshapes();
 
 	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		FQuat GetHeadQuat();
-
-	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		FVector GetHeadTranslation();
+		FTransform GetHeadTransform();
 
 	UFUNCTION(BlueprintPure, Category = "MocapEngine")
 		void GetMocapData(TArray<float>& Blendshapes,
@@ -133,6 +130,7 @@ private:
 
 	// Facial expression
 	NvFacialExpression mFacialExpression = NvFacialExpression();
+	FTransform mHeadTransform;
 
 	// Mocap of Mediapipe
 	MocapMpProxy mMocap = MocapMpProxy();

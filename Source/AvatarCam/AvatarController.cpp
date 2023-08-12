@@ -7,6 +7,9 @@ AAvatarController::AAvatarController()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	// Initialize the names of blendshapes
+	InitBlendshapeNames();
+
 }
 
 // Called when the game starts or when spawned
@@ -27,22 +30,24 @@ bool AAvatarController::IsDataReady() {
 	return !mQuats.IsEmpty();
 }
 
-void AAvatarController::SetMocapData(TArray<float> Blendshapes,
+void AAvatarController::SetMocapData(
+	FTransform HeadTransform,
+	TArray<float> Blendshapes,
 	TArray<FVector> Bones, TArray<FQuat> Quats) {
 
+	mHeadTransform = HeadTransform;
 	mBlendshapes = Blendshapes;
 	mBones = Bones;
 	mQuats = Quats;
 
 }
 
-void AAvatarController::GetMocapData(TArray<float>& Blendshapes, 
-	TArray<FVector>& Bones, TArray<FQuat>& Quats) {
+void AAvatarController::GetHeadTransform(FTransform& HeadTransform) {
+	HeadTransform = mHeadTransform;
+}
 
-	Blendshapes = mBlendshapes;
-	Bones = mBones;
-	Quats = mQuats;
-
+void AAvatarController::GetBlendshapeNames(TArray<FString>& BlendshapeNames) {
+    BlendshapeNames = mBlendshapeNames;
 }
 
 void AAvatarController::GetBlendshapes(TArray<float>& Blendshapes) {
@@ -331,4 +336,64 @@ int AAvatarController::GetISpringR() {
 	return mISpringR;
 }
 
+/* Protected methods */
 
+void AAvatarController::InitBlendshapeNames() {
+
+	mBlendshapeNames.Init("", mNumBlendshapes);
+	//mBlendshapeNames.SetNum(mNumBlendshapes);
+
+	// Follow the ARKit blendshape names
+	mBlendshapeNames[0] = "browInnerUp";
+	mBlendshapeNames[1] = "browDownLeft";
+	mBlendshapeNames[2] = "browDownRight";
+	mBlendshapeNames[3] = "browOuterUpLeft";
+	mBlendshapeNames[4] = "browOuterUpRight";
+	mBlendshapeNames[5] = "eyeLookUpLeft";
+	mBlendshapeNames[6] = "eyeLookUpRight";
+	mBlendshapeNames[7] = "eyeLookDownLeft";
+	mBlendshapeNames[8] = "eyeLookDownRight";
+	mBlendshapeNames[9] = "eyeLookOutLeft";
+	mBlendshapeNames[10] = "eyeLookInLeft";
+	mBlendshapeNames[11] = "eyeLookInRight";
+	mBlendshapeNames[12] = "eyeLookOutRight";
+	mBlendshapeNames[13] = "eyeBlinkLeft";
+	mBlendshapeNames[14] = "eyeBlinkRight";
+	mBlendshapeNames[15] = "eyeSquintLeft";
+	mBlendshapeNames[16] = "eyeSquintRight";
+	mBlendshapeNames[17] = "eyeWideLeft";
+	mBlendshapeNames[18] = "eyeWideRight";
+	mBlendshapeNames[19] = "cheekPuff";
+	mBlendshapeNames[20] = "cheekSquintLeft";
+	mBlendshapeNames[21] = "cheekSquintRight";
+	mBlendshapeNames[22] = "noseSneerLeft";
+	mBlendshapeNames[23] = "noseSneerRight";
+	mBlendshapeNames[24] = "jawOpen";
+	mBlendshapeNames[25] = "jawForward";
+	mBlendshapeNames[26] = "jawLeft";
+	mBlendshapeNames[27] = "jawRight";
+	mBlendshapeNames[28] = "mouthFunnel";
+	mBlendshapeNames[29] = "mouthPucker";
+	mBlendshapeNames[30] = "mouthLeft";
+	mBlendshapeNames[31] = "mouthRight";
+	mBlendshapeNames[32] = "mouthRollUpper";
+	mBlendshapeNames[33] = "mouthRollLower";
+	mBlendshapeNames[34] = "mouthShrugUpper";
+	mBlendshapeNames[35] = "mouthShrugLower";
+	mBlendshapeNames[36] = "mouthClose";
+	mBlendshapeNames[37] = "mouthSmileLeft";
+	mBlendshapeNames[38] = "mouthSmileRight";
+	mBlendshapeNames[39] = "mouthFrownLeft";
+	mBlendshapeNames[40] = "mouthFrownRight";
+	mBlendshapeNames[41] = "mouthDimpleLeft";
+	mBlendshapeNames[42] = "mouthDimpleRight";
+	mBlendshapeNames[43] = "mouthUpperUpLeft";
+	mBlendshapeNames[44] = "mouthUpperUpRight";
+	mBlendshapeNames[45] = "mouthLowerDownLeft";
+	mBlendshapeNames[46] = "mouthLowerDownRight";
+	mBlendshapeNames[47] = "mouthPressLeft";
+	mBlendshapeNames[48] = "mouthPressRight";
+	mBlendshapeNames[49] = "mouthStretchLeft";
+	mBlendshapeNames[50] = "mouthStretchRight";
+	mBlendshapeNames[51] = "tougueOut";
+}

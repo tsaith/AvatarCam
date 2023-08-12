@@ -102,11 +102,16 @@ void AMocapEngine::Process() {
 		// Facial expression
 		mFacialExpression.Detect(image);
 
+		// Head
+		mHeadTransform = mFacialExpression.GetHeadTransform();
+
+		/*
 		msg = FString::Printf(TEXT("mIsFace|Detected: %d"), IsFaceDetected());
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, *msg);
 
 		msg = FString::Printf(TEXT("jawOpen: %f"), GetBlendshapes()[24]);
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, *msg);
+		*/
 
 		// Update bones and quats 
 		mBones = mMocap.GetBones();
@@ -114,10 +119,6 @@ void AMocapEngine::Process() {
 
 		mMpPoseBones = mMocap.GetMpPoseBones();
 		mMpPoseBones = ToPixelSpace(mMpPoseBones, mWidthTarget, mHeightTarget);
-
-		//int iRightWrist = 15;
-		//FVector rightWrist = mBones[iRightWrist];
-	    //UPrintBPLibrary::PrintVector("RightWrist: ", rightWrist);
 
 		// Perform diagnostics 
 		Diagnostic();
@@ -209,12 +210,8 @@ TArray<float> AMocapEngine::GetBlendshapes() {
 	return mFacialExpression.GetBlendshapes();
 }
 
-FQuat AMocapEngine::GetHeadQuat() {
-	return mFacialExpression.GetHeadQuat();
-}
-
-FVector AMocapEngine::GetHeadTranslation() {
-	return mFacialExpression.GetHeadTranslation();
+FTransform AMocapEngine::GetHeadTransform() {
+	return mHeadTransform;
 }
 
 void AMocapEngine::GetMocapData(TArray<float>& Blendshapes,

@@ -82,8 +82,10 @@ void UPrintBPLibrary::PrintFVector4(FString Msg, FVector4 Input, bool ToScreen, 
 
 void UPrintBPLibrary::PrintQuat(FString Msg, FQuat Input, bool ToScreen, bool ToLog) {
 
-	FString s = FString::SanitizeFloat(Input.W) + ", " + FString::SanitizeFloat(Input.X) + ", " +
-		FString::SanitizeFloat(Input.Y) + +", " + FString::SanitizeFloat(Input.Z);
+	FString s = FString::SanitizeFloat(Input.X) + ", " +
+		FString::SanitizeFloat(Input.Y) + ", " +
+		FString::SanitizeFloat(Input.Z) + ", " +
+		FString::SanitizeFloat(Input.W);
 
 	Msg += s;
 	PrintMessage(Msg, ToScreen, ToLog);

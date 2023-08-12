@@ -25,16 +25,22 @@ public:
     void Detect(cv::Mat& Image);
     bool IsFaceDetected();
     TArray<float> GetBlendshapes();
+    FTransform GetHeadTransform();
     FQuat GetHeadQuat();
     FVector GetHeadTranslation();
-
+    void ConvertQuatFromNvToUnreal(FQuat& QuatIn, FQuat& QuatOut);
 
 private:
+
 
     bool mIsFaceDetected = false;
     const int mNumBlendshapes = 52;
     TArray<float> mBlendshapes;
-    FQuat mHeadQuat = FQuat(0.0, 0.0, 0.0, 1.0);
-    FVector mHeadTranslation = FVector(0.0, 0.0, 0.0);
+    FTransform mHeadTransform;
+
+    FQuat mHeadQuat;
+    FRotator mHeadRotator;
+    FVector mHeadTranslation;
+    FVector mHeadScale = FVector(1.0, 1.0, 1.0);
 
 };

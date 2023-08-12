@@ -1,6 +1,5 @@
 
 #include "NvFacialExpression.h"
-
 #include "ThirdParty/FacialExpressionLibrary/include/FacialExpressionLibrary.h"
 
 NvFacialExpression::NvFacialExpression()
@@ -38,10 +37,13 @@ void NvFacialExpression::Detect(cv::Mat& Image)
     }
 
     p = FacialExpressionGetHeadQuat();
-    mHeadQuat = FQuat(p[0], p[1], p[2], p[3]);
+    FQuat quat = FQuat(p[0], p[1], p[2], p[3]);
+    ConvertQuatFromNvToUnreal(quat, mHeadQuat);
 
     p = FacialExpressionGetHeadTranslation();
     mHeadTranslation = FVector(p[0], p[1], p[2]);
+
+    mHeadTransform = FTransform(mHeadQuat, mHeadTranslation, mHeadScale);
 
 }
 
@@ -55,6 +57,11 @@ TArray<float> NvFacialExpression::GetBlendshapes()
     return mBlendshapes;
 }
 
+FTransform NvFacialExpression::GetHeadTransform() 
+{
+    return mHeadTransform;
+}
+
 FQuat NvFacialExpression::GetHeadQuat() 
 {
     return mHeadQuat;
@@ -63,4 +70,17 @@ FQuat NvFacialExpression::GetHeadQuat()
 FVector NvFacialExpression::GetHeadTranslation() 
 {
     return mHeadTranslation;
+}
+
+void NvFacialExpression::ConvertQuatFromNvToUnreal(FQuat& QuatIn, FQuat& QuatOut)
+{
+
+    float x, y, z, w;
+    x = -QuatIn.X;
+    y = -QuatIn.Z;
+    z = -QuatIn.Y;
+    w = QuatIn.W;
+
+    QuatOut = FQuat(x, y, z, w);
+
 }

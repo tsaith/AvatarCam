@@ -28,8 +28,10 @@ void FNvAR4UModule::ShutdownModule()
 {
 	// This function may be called during shutdown to clean up your module.  For modules that support dynamic reloading,
 	// we call this function before unloading the module.
-    FPlatformProcess::FreeDllHandle(mLibHandle);
-    mLibHandle = nullptr;
+    if (mLibHandle) {
+        FPlatformProcess::FreeDllHandle(mLibHandle);
+        mLibHandle = nullptr;
+    }
 }
 
 #undef LOCTEXT_NAMESPACE

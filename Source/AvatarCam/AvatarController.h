@@ -13,6 +13,7 @@ class AVATARCAM_API AAvatarController : public AActor
 	GENERATED_BODY()
 	
 public:	
+
 	// Sets default values for this actor's properties
 	AAvatarController();
 
@@ -23,12 +24,15 @@ public:
 		bool IsDataReady();
 
 	UFUNCTION(BlueprintCallable, Category = "AvatarController")
-		void SetMocapData(TArray<float> Blendshapes,
+		void SetMocapData(FTransform HeadTransform, 
+            TArray<float> Blendshapes,
             TArray<FVector> Bones, TArray<FQuat> Quats);
 
-	UFUNCTION(BlueprintPure, Category = "AvatarController")
-		void GetMocapData(TArray<float>& Blendshapes, 
-            TArray<FVector>& Bones, TArray<FQuat>& Quats);
+    UFUNCTION(BlueprintPure, Category = "AvatarController")
+        void GetHeadTransform(FTransform& HeadTransform);
+
+    UFUNCTION(BlueprintPure, Category = "AvatarController")
+        void GetBlendshapeNames(TArray<FString>& BlendshapeNames);
 
     UFUNCTION(BlueprintPure, Category = "AvatarController")
         void GetBlendshapes(TArray<float>& Blendshapes);
@@ -249,9 +253,16 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+    void InitBlendshapeNames();
+
 private:
  
+    const int mNumBlendshapes = 52;
+
+    FTransform mHeadTransform;
+	TArray<FString> mBlendshapeNames;
 	TArray<float> mBlendshapes;
+
 	TArray<FVector> mBones;
 	TArray<FQuat> mQuats;
 
