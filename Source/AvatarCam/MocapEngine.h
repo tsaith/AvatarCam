@@ -8,8 +8,8 @@
 #include "PostOpenCVHeaders.h"
 
 #include "MocapData.h"
+#include "MocapLiveCore.h"
 #include "MocapMpProxy.h"
-#include "NvFacialExpression.h"
 
 #include "Math/UnrealMathUtility.h"
 
@@ -128,9 +128,10 @@ private:
 	const int mWidthTarget = 640;
 	const int mHeightTarget = 480;
 
-	// Facial expression
-	NvFacialExpression mFacialExpression = NvFacialExpression();
-	FTransform mHeadTransform;
+
+
+	// Mocap Live
+	MocapLiveCore mMocapLive;
 
 	// Mocap of Mediapipe
 	MocapMpProxy mMocap = MocapMpProxy();
@@ -139,6 +140,10 @@ private:
 	FString mEngineName = "unreal";
 	bool mIsCalibrated = false;
 
+	// Head
+	FTransform mHeadTransform;
+
+	// Skeleton
 	int mNumBones = -1;
 	TArray<FVector> mBones;
 	TArray<FQuat> mQuats;

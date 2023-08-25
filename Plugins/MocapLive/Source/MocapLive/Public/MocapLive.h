@@ -4,7 +4,7 @@
 
 #include "Modules/ModuleManager.h"
 
-class FMocapMpModule : public IModuleInterface
+class FMocapLiveModule : public IModuleInterface
 {
 public:
 
@@ -14,5 +14,5 @@ public:
 
 private:
 	/** Handle to the test dll we will load */
-	void*	ExampleLibraryHandle;
+	void* LibHandle;
 };

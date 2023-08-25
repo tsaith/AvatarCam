@@ -9,7 +9,7 @@ _build/
 Shipping/*
 
 # Plugins
-Plugins/*/Binaries/*
+Plugins/*/Binaries/Win64/*
 Plugins/*/Intermediate/*
 Plugins/*/ThirdParty/*
 

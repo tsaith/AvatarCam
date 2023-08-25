@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "PreOpenCVHeaders.h"  
@@ -15,32 +13,34 @@
 
 using namespace std;
 
-class NVAR4U_API NvFacialExpression {
 
+//namespace MocapLive {
+
+class MOCAPLIVE_API MocapLiveCore
+{
 public:
 
-	NvFacialExpression();
-	~NvFacialExpression();
+	MocapLiveCore();
+	~MocapLiveCore();
+
 	void Init(int ImageWidth, int ImageHeight);
     void Detect(cv::Mat& Image);
     bool IsFaceDetected();
     TArray<float> GetBlendshapes();
     FTransform GetHeadTransform();
-    FQuat GetHeadQuat();
-    FVector GetHeadTranslation();
     void ConvertQuatFromNvToUnreal(FQuat& QuatIn, FQuat& QuatOut);
+
 
 private:
 
+    FTransform MakeTransform(float* pTransform);
 
     bool mIsFaceDetected = false;
     const int mNumBlendshapes = 52;
     TArray<float> mBlendshapes;
     FTransform mHeadTransform;
 
-    FQuat mHeadQuat;
-    FRotator mHeadRotator;
-    FVector mHeadTranslation;
-    FVector mHeadScale = FVector(1.0, 1.0, 1.0);
 
 };
+
+//} // Namespace

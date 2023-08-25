@@ -9,6 +9,7 @@ AMocapEngine::AMocapEngine()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	// Mocap Mp
 	FString libPath = FPaths::Combine(FPaths::ProjectDir(), "Libs", "libmocap_mp.dll");
 	mMocap.LoadLibrary(libPath);
 	UE_LOG(LogTemp, Warning, TEXT("libPath: %s"), *libPath);
@@ -34,12 +35,6 @@ AMocapEngine::AMocapEngine()
 	// Quaternions 
 	mQuats.SetNum(mNumBones);
 
-	// Facial control parameters
-	//mFacialCtrlParams.SetNum(mMocap.GetNumFacialCtrlParams());
-
-	// Facial expression
-	mFacialExpression.Init(ImageWidth, ImageHeight);
-
 
 }
 
@@ -59,6 +54,9 @@ void AMocapEngine::BeginPlay()
 
 	mImage = cv::Mat(ImageHeight, ImageWidth, CV_8UC4, cv::Scalar(0, 0, 0, 255));
 	mData.Init(FColor(0, 0, 0, 255), ImageWidth*ImageHeight);
+
+	// Mocap Live
+	mMocapLive.Init(ImageWidth, ImageHeight);
 
 }
 
@@ -96,14 +94,14 @@ void AMocapEngine::Process() {
 	    cv::cvtColor(mImage, image, cv::COLOR_BGRA2BGR);
         cv::resize(image, image, cv::Size(mWidthTarget, mHeightTarget));
 
+        // Mocap Live
+		mMocapLive.Detect(image);
+
 		// Motion capture
 		mMocap.Detect(image);
 
-		// Facial expression
-		mFacialExpression.Detect(image);
-
 		// Head
-		mHeadTransform = mFacialExpression.GetHeadTransform();
+		mHeadTransform = mMocapLive.GetHeadTransform();
 
 		/*
 		msg = FString::Printf(TEXT("mIsFace|Detected: %d"), IsFaceDetected());
@@ -203,11 +201,11 @@ FString AMocapEngine::GetEngineName() {
 } 
 
 bool AMocapEngine::IsFaceDetected() {
-	return mFacialExpression.IsFaceDetected();
+	return mMocapLive.IsFaceDetected();
 }
 
 TArray<float> AMocapEngine::GetBlendshapes() {
-	return mFacialExpression.GetBlendshapes();
+	return mMocapLive.GetBlendshapes();
 }
 
 FTransform AMocapEngine::GetHeadTransform() {
