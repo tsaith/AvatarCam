@@ -9,7 +9,7 @@
 
 #include "MocapData.h"
 #include "MocapLiveCore.h"
-#include "MocapMpProxy.h"
+//#include "MocapMpProxy.h"
 
 #include "Math/UnrealMathUtility.h"
 
@@ -92,6 +92,9 @@ public:
 		FTransform GetHeadTransform();
 
 	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+		FTransform GetSkelTransform(int Index);
+
+	UFUNCTION(BlueprintPure, Category = "MocapEngine")
 		void GetMocapData(TArray<float>& Blendshapes,
 			TArray<FVector>& Bones, TArray<FQuat>& Quats);
 
@@ -134,7 +137,7 @@ private:
 	MocapLiveCore mMocapLive;
 
 	// Mocap of Mediapipe
-	MocapMpProxy mMocap = MocapMpProxy();
+	//MocapMpProxy mMocap = MocapMpProxy();
 
 	bool mCanLoadMocapLibrary = false;
 	FString mEngineName = "unreal";

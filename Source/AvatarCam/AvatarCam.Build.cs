@@ -24,6 +24,7 @@ public class AvatarCam : ModuleRules
 			"VRM4U", "MocapLive"
 		});
 
+		/*
         // Load libmocap_mp.dll
         string MocapMpDLL = "libmocap_mp.dll";
 		string ProjectDirectory = Path.Combine(ModuleDirectory, "..\\..\\");
@@ -32,6 +33,7 @@ public class AvatarCam : ModuleRules
 
 		PublicDelayLoadDLLs.Add(MocapMpDLL);
         RuntimeDependencies.Add(MocapMpDLLPath);
+		*/
 
 	}
 }

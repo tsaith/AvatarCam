@@ -9,6 +9,7 @@ AMocapEngine::AMocapEngine()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	/*
 	// Mocap Mp
 	FString libPath = FPaths::Combine(FPaths::ProjectDir(), "Libs", "libmocap_mp.dll");
 	mMocap.LoadLibrary(libPath);
@@ -24,23 +25,13 @@ AMocapEngine::AMocapEngine()
 	else {
 		UE_LOG(LogTemp, Warning, TEXT("Mocap: Failed to load library."));
 	}
-
-	// Number of bones
-	mNumBones = mMocap.GetNumBones();
-	//UPrintBPLibrary::PrintInt("NumBones: ", mMocap.GetNumBones());
-
-	// Bones
-	mBones.SetNum(mNumBones);
-
-	// Quaternions 
-	mQuats.SetNum(mNumBones);
-
+	*/
 
 }
 
 AMocapEngine::~AMocapEngine()
 {
-	mMocap.Finalize();
+	//mMocap.Finalize();
 
 	if (mCap.isOpened()) {
 		mCap.release();
@@ -58,12 +49,27 @@ void AMocapEngine::BeginPlay()
 	// Mocap Live
 	mMocapLive.Init(ImageWidth, ImageHeight);
 
+	// Number of bones
+	mNumBones = mMocapLive.GetNumBones();
+	//mNumBones = mMocap.GetNumBones();
+
+	// Bones
+	mBones.SetNum(mNumBones);
+
+	// Quaternions 
+	mQuats.SetNum(mNumBones);
+
+
 }
 
 // Called every frame
 void AMocapEngine::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	FString msg;
+	msg = FString::Printf(TEXT("ttt"));
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, *msg);
 
 	Process();
 }
@@ -82,7 +88,7 @@ void AMocapEngine::Process() {
 	TArray<float> blendshapes;
 
 	// Motion capture 
-	if (mCanLoadMocapLibrary) {
+	//if (mCanLoadMocapLibrary) {
 
 		bool bIsEmpty = mImage.empty();
 		if (bIsEmpty) return;
@@ -98,30 +104,42 @@ void AMocapEngine::Process() {
 		mMocapLive.Detect(image);
 
 		// Motion capture
-		mMocap.Detect(image);
+		//mMocap.Detect(image);
 
 		// Head
 		mHeadTransform = mMocapLive.GetHeadTransform();
 
-		/*
 		msg = FString::Printf(TEXT("mIsFace|Detected: %d"), IsFaceDetected());
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, *msg);
 
-		msg = FString::Printf(TEXT("jawOpen: %f"), GetBlendshapes()[24]);
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, *msg);
-		*/
-
 		// Update bones and quats 
-		mBones = mMocap.GetBones();
-		mQuats = mMocap.GetQuats();
+		mQuats = mMocapLive.GetQuats();
+		mBones = mMocapLive.GetBones();
+		//mQuats = mMocap.GetQuats();
+		//mBones = mMocap.GetBones();
 
-		mMpPoseBones = mMocap.GetMpPoseBones();
-		mMpPoseBones = ToPixelSpace(mMpPoseBones, mWidthTarget, mHeightTarget);
+		msg = FString::Printf(TEXT("mQuats[0].W: %f"), mQuats[0].W);
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, *msg);
+
+		msg = FString::Printf(TEXT("mQuats[0].X: %f"), mQuats[0].X);
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, *msg);
+
+		msg = FString::Printf(TEXT("mQuats[0].Y: %f"), mQuats[0].Y);
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, *msg);
+
+		msg = FString::Printf(TEXT("mQuats[0].Z: %f"), mQuats[0].Z);
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, *msg);
+
+		msg = FString::Printf(TEXT("mBones[0].X: %f"), mBones[0].X);
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, *msg);
+
+		//mMpPoseBones = mMocap.GetMpPoseBones();
+		//mMpPoseBones = ToPixelSpace(mMpPoseBones, mWidthTarget, mHeightTarget);
 
 		// Perform diagnostics 
 		Diagnostic();
 
-	}
+	//}
 }
 
 void AMocapEngine::Diagnostic() {
@@ -189,7 +207,7 @@ void AMocapEngine::SetImageTexture(UTexture2D* ImageTexture) {
 }
 
 void AMocapEngine::Calibrate() {
-	mMocap.Calibrate();
+	//mMocap.Calibrate();
 }
 
 void AMocapEngine::SetEngineName(FString EngineName) {
@@ -212,6 +230,9 @@ FTransform AMocapEngine::GetHeadTransform() {
 	return mHeadTransform;
 }
 
+FTransform AMocapEngine::GetSkelTransform(int Index) {
+	return mMocapLive.GetSkelTransform(Index);
+}
 void AMocapEngine::GetMocapData(TArray<float>& Blendshapes,
 	TArray<FVector>& Bones, TArray<FQuat>& Quats) {
 

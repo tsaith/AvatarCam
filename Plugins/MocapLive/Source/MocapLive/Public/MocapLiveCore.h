@@ -28,11 +28,16 @@ public:
     bool IsFaceDetected();
     TArray<float> GetBlendshapes();
     FTransform GetHeadTransform();
-    void ConvertQuatFromNvToUnreal(FQuat& QuatIn, FQuat& QuatOut);
+    int GetNumBones();
+    FTransform GetSkelTransform(int Index);
+    TArray<FQuat> GetQuats();
+    TArray<FVector> GetBones();
 
 
 private:
 
+    void ConvertQuatFromNvToUnreal(FQuat& QuatIn, FQuat& QuatOut);
+    void ConvertQuatFromMpToUnreal(FQuat& QuatIn, FQuat& QuatOut);
     FTransform MakeTransform(float* pTransform);
 
     bool mIsFaceDetected = false;
@@ -40,6 +45,10 @@ private:
     TArray<float> mBlendshapes;
     FTransform mHeadTransform;
 
+    int mNumBones = 68;
+    TArray<FTransform> mSkelTransforms;
+    TArray<FQuat> mQuats;
+    TArray<FVector> mBones;
 
 };
 
