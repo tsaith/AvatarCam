@@ -27,18 +27,17 @@ void AAvatarController::Tick(float DeltaTime)
 }
 
 bool AAvatarController::IsDataReady() {
-	return !mQuats.IsEmpty();
+	return !mSkelTransforms.IsEmpty();
 }
 
 void AAvatarController::SetMocapData(
-	FTransform HeadTransform,
 	TArray<float> Blendshapes,
-	TArray<FVector> Bones, TArray<FQuat> Quats) {
-
-	mHeadTransform = HeadTransform;
+	FTransform HeadTransform,
+	TArray<FTransform> SkelTransforms)
+{
 	mBlendshapes = Blendshapes;
-	mBones = Bones;
-	mQuats = Quats;
+	mHeadTransform = HeadTransform;
+	mSkelTransforms = SkelTransforms;
 
 }
 
@@ -54,6 +53,11 @@ void AAvatarController::GetBlendshapes(TArray<float>& Blendshapes) {
 	Blendshapes = mBlendshapes;
 }
 
+void AAvatarController::GetSkelTransforms(TArray<FTransform>& SkelTransforms) {
+    SkelTransforms = mSkelTransforms;
+}
+
+/*
 void AAvatarController::GetBones(TArray<FVector>& Bones) {
 	Bones = mBones;
 }
@@ -61,8 +65,7 @@ void AAvatarController::GetBones(TArray<FVector>& Bones) {
 void AAvatarController::GetQuats(TArray<FQuat>& Quats) {
 	Quats = mQuats;
 }
-
-
+*/
 
 int AAvatarController::GetIPelvis() {
 	return mIPelvis;

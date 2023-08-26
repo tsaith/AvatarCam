@@ -13,6 +13,11 @@ public:
 	virtual void ShutdownModule() override;
 
 private:
-	/** Handle to the test dll we will load */
-	void* LibHandle;
+
+	void* LoadLibrary(FString PluginDir, FString RelativePath);
+	void FreeLibrary(void* Handle);
+
+	void* LibMocapHandle;
+	void* LibFacialExpressionHandle;
+	void* LibMocapMpHandle;
 };

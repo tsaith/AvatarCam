@@ -16,18 +16,28 @@ void FMocapLiveModule::StartupModule()
 	FString BaseDir = IPluginManager::Get().FindPlugin("MocapLive")->GetBaseDir();
 
 	// Add on the relative location of the third party dll and load it
-	FString LibPath;
-	LibPath = FPaths::Combine(*BaseDir, TEXT("Binaries/ThirdParty/MocapLive/lib/Win64/LibMocap.dll"));
+	FString LibFacialExpressionPath;
+	FString LibMocapMpPath;
+	FString LibMocapPath;
 
-	LibHandle = !LibPath.IsEmpty() ? FPlatformProcess::GetDllHandle(*LibPath) : nullptr;
+	// The loading sequence is important
+	LibFacialExpressionHandle = LoadLibrary(*BaseDir, TEXT("Binaries/ThirdParty/MocapLive/lib/Win64/LibFacialExpression.dll"));
+	LibMocapMpHandle = LoadLibrary(*BaseDir, TEXT("Binaries/ThirdParty/MocapLive/lib/Win64/libmocap_mp.dll"));
+	LibMocapHandle = LoadLibrary(*BaseDir, TEXT("Binaries/ThirdParty/MocapLive/lib/Win64/LibMocap.dll"));
 
-	if (LibHandle)
+	if (!LibFacialExpressionHandle)
 	{
+		FMessageDialog::Open(EAppMsgType::Ok, LOCTEXT("ThirdPartyLibraryError", "Failed to load MocapLive: LibFacialExpressionMocap.dll."));
 	}
-	else
+	if (!LibMocapMpHandle)
 	{
-		FMessageDialog::Open(EAppMsgType::Ok, LOCTEXT("ThirdPartyLibraryError", "Failed to load MocapLive library."));
+		FMessageDialog::Open(EAppMsgType::Ok, LOCTEXT("ThirdPartyLibraryError", "Failed to load MocapLive: libmocap_mp.dll."));
 	}
+	if (!LibMocapHandle)
+	{
+		FMessageDialog::Open(EAppMsgType::Ok, LOCTEXT("ThirdPartyLibraryError", "Failed to load MocapLive: LibMocap.dll."));
+	}
+
 }
 
 void FMocapLiveModule::ShutdownModule()
@@ -36,9 +46,26 @@ void FMocapLiveModule::ShutdownModule()
 	// we call this function before unloading the module.
 
 	// Free the dll handle
-	FPlatformProcess::FreeDllHandle(LibHandle);
-	LibHandle = nullptr;
+	FreeLibrary(LibMocapMpHandle);
+	FreeLibrary(LibFacialExpressionHandle);
+	FreeLibrary(LibMocapHandle);
+
 }
+
+void* FMocapLiveModule::LoadLibrary(FString PluginDir, FString RelativePath)
+{
+	FString libPath = FPaths::Combine(*PluginDir, *RelativePath);
+	void* handle = !libPath.IsEmpty() ? FPlatformProcess::GetDllHandle(*libPath) : nullptr;
+
+	return handle;
+}
+
+void FMocapLiveModule::FreeLibrary(void* Handle)
+{
+	FPlatformProcess::FreeDllHandle(Handle);
+	Handle = nullptr;
+}
+
 
 #undef LOCTEXT_NAMESPACE
 	

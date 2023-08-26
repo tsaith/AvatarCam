@@ -9,24 +9,6 @@ AMocapEngine::AMocapEngine()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	/*
-	// Mocap Mp
-	FString libPath = FPaths::Combine(FPaths::ProjectDir(), "Libs", "libmocap_mp.dll");
-	mMocap.LoadLibrary(libPath);
-	UE_LOG(LogTemp, Warning, TEXT("libPath: %s"), *libPath);
-
-	mCanLoadMocapLibrary = mMocap.LoadLibrary(libPath);
-	mMocap.Init(ImageWidth, ImageHeight);
-	mMocap.SetEngineName(mEngineName);
-
-	if (mCanLoadMocapLibrary) {
-		UE_LOG(LogTemp, Warning, TEXT("Mocap: Successful to load library."));
-	}
-	else {
-		UE_LOG(LogTemp, Warning, TEXT("Mocap: Failed to load library."));
-	}
-	*/
-
 }
 
 AMocapEngine::~AMocapEngine()
@@ -51,12 +33,9 @@ void AMocapEngine::BeginPlay()
 
 	// Number of bones
 	mNumBones = mMocapLive.GetNumBones();
-	//mNumBones = mMocap.GetNumBones();
 
-	// Bones
+	mSkelTransforms.SetNum(mNumBones);
 	mBones.SetNum(mNumBones);
-
-	// Quaternions 
 	mQuats.SetNum(mNumBones);
 
 
@@ -66,10 +45,6 @@ void AMocapEngine::BeginPlay()
 void AMocapEngine::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	FString msg;
-	msg = FString::Printf(TEXT("ttt"));
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, *msg);
 
 	Process();
 }
@@ -87,59 +62,34 @@ void AMocapEngine::Process() {
 	bool bIsFaceDetected = false;
 	TArray<float> blendshapes;
 
-	// Motion capture 
-	//if (mCanLoadMocapLibrary) {
+	bool bIsEmpty = mImage.empty();
+	if (bIsEmpty) return;
 
-		bool bIsEmpty = mImage.empty();
-		if (bIsEmpty) return;
+	ConvertTextureToCvMat(mImageTexture, mImage);
 
-		ConvertTextureToCvMat(mImageTexture, mImage);
-		//ConvertDataToImage(mData, mImage);
+	// Preprocess 
+    cv::cvtColor(mImage, image, cv::COLOR_BGRA2BGR);
+    cv::resize(image, image, cv::Size(mWidthTarget, mHeightTarget));
 
-		// Preprocess 
-	    cv::cvtColor(mImage, image, cv::COLOR_BGRA2BGR);
-        cv::resize(image, image, cv::Size(mWidthTarget, mHeightTarget));
+    // Mocap Live
+	mMocapLive.Detect(image);
 
-        // Mocap Live
-		mMocapLive.Detect(image);
+	// Head
+	mHeadTransform = mMocapLive.GetHeadTransform();
 
-		// Motion capture
-		//mMocap.Detect(image);
+	msg = FString::Printf(TEXT("mIsFace|Detected: %d"), IsFaceDetected());
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, *msg);
 
-		// Head
-		mHeadTransform = mMocapLive.GetHeadTransform();
+	// Update skeleton transforms
+	mSkelTransforms = mMocapLive.GetSkelTransforms();
 
-		msg = FString::Printf(TEXT("mIsFace|Detected: %d"), IsFaceDetected());
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, *msg);
+	// Update bones and quats 
+	mQuats = mMocapLive.GetQuats();
+	mBones = mMocapLive.GetBones();
 
-		// Update bones and quats 
-		mQuats = mMocapLive.GetQuats();
-		mBones = mMocapLive.GetBones();
-		//mQuats = mMocap.GetQuats();
-		//mBones = mMocap.GetBones();
+	// Perform diagnostics 
+	Diagnostic();
 
-		msg = FString::Printf(TEXT("mQuats[0].W: %f"), mQuats[0].W);
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, *msg);
-
-		msg = FString::Printf(TEXT("mQuats[0].X: %f"), mQuats[0].X);
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, *msg);
-
-		msg = FString::Printf(TEXT("mQuats[0].Y: %f"), mQuats[0].Y);
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, *msg);
-
-		msg = FString::Printf(TEXT("mQuats[0].Z: %f"), mQuats[0].Z);
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, *msg);
-
-		msg = FString::Printf(TEXT("mBones[0].X: %f"), mBones[0].X);
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, *msg);
-
-		//mMpPoseBones = mMocap.GetMpPoseBones();
-		//mMpPoseBones = ToPixelSpace(mMpPoseBones, mWidthTarget, mHeightTarget);
-
-		// Perform diagnostics 
-		Diagnostic();
-
-	//}
 }
 
 void AMocapEngine::Diagnostic() {
@@ -207,16 +157,8 @@ void AMocapEngine::SetImageTexture(UTexture2D* ImageTexture) {
 }
 
 void AMocapEngine::Calibrate() {
-	//mMocap.Calibrate();
+	// to do
 }
-
-void AMocapEngine::SetEngineName(FString EngineName) {
-	mEngineName = EngineName;
-}
-
-FString AMocapEngine::GetEngineName() {
-	return mEngineName;
-} 
 
 bool AMocapEngine::IsFaceDetected() {
 	return mMocapLive.IsFaceDetected();
@@ -230,18 +172,9 @@ FTransform AMocapEngine::GetHeadTransform() {
 	return mHeadTransform;
 }
 
-FTransform AMocapEngine::GetSkelTransform(int Index) {
-	return mMocapLive.GetSkelTransform(Index);
+TArray<FTransform> AMocapEngine::GetSkelTransforms() {
+	return mSkelTransforms;
 }
-void AMocapEngine::GetMocapData(TArray<float>& Blendshapes,
-	TArray<FVector>& Bones, TArray<FQuat>& Quats) {
-
-	Blendshapes = GetBlendshapes();
-	Bones = mBones;
-	Quats = mQuats;
-
-}
-
 
 void AMocapEngine::GetBones(TArray<FVector> &Bones) {
 	Bones = mBones;

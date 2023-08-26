@@ -29,7 +29,7 @@ public:
     TArray<float> GetBlendshapes();
     FTransform GetHeadTransform();
     int GetNumBones();
-    FTransform GetSkelTransform(int Index);
+    TArray<FTransform> GetSkelTransforms();
     TArray<FQuat> GetQuats();
     TArray<FVector> GetBones();
 
@@ -39,6 +39,7 @@ private:
     void ConvertQuatFromNvToUnreal(FQuat& QuatIn, FQuat& QuatOut);
     void ConvertQuatFromMpToUnreal(FQuat& QuatIn, FQuat& QuatOut);
     FTransform MakeTransform(float* pTransform);
+    void UpdateSkelTransforms(TArray<FTransform>& SkelTransforms);
 
     bool mIsFaceDetected = false;
     const int mNumBlendshapes = 52;

@@ -8,7 +8,7 @@ MocapLiveCore::MocapLiveCore()
 
 MocapLiveCore::~MocapLiveCore()
 {
-    //MocapFinalize();
+    MocapFinalize();
 }
 
 void MocapLiveCore::Init(int ImageWidth, int ImageHeight)
@@ -50,14 +50,11 @@ void MocapLiveCore::Detect(cv::Mat& Image)
     mHeadTransform.SetRotation(rotation);
 
     // Skeleton
-    FTransform transform;
+    UpdateSkelTransforms(mSkelTransforms);
+
     for (int i = 0; i < mNumBones; i++) { 
-
-        transform = GetSkelTransform(i);
-        mSkelTransforms[i] = transform;
-        mQuats[i] = transform.GetRotation();
-        mBones[i] = transform.GetTranslation();
-
+        mQuats[i] = mSkelTransforms[i].GetRotation();
+        mBones[i] = mSkelTransforms[i].GetTranslation();
     }
 
 }
@@ -82,17 +79,9 @@ int MocapLiveCore::GetNumBones()
     return mNumBones;
 }
 
-FTransform MocapLiveCore::GetSkelTransform(int Index) 
+TArray<FTransform> MocapLiveCore::GetSkelTransforms()
 {
-    float* p = MocapGetSkelTransform(Index); 
-    FTransform transform = MakeTransform(p);
-
-    // Convert quaternion from Mediapipe to Unreal coordinates
-    FQuat rotation = transform.GetRotation();
-    ConvertQuatFromMpToUnreal(rotation, rotation);
-    transform.SetRotation(rotation);
-
-    return transform;
+    return mSkelTransforms;
 }
 
 TArray<FQuat> MocapLiveCore::GetQuats()
@@ -133,7 +122,7 @@ void MocapLiveCore::ConvertQuatFromMpToUnreal(FQuat& QuatIn, FQuat& QuatOut)
     QuatOut = FQuat(x, y, z, w);
 
 }
-// Private methods
+
 FTransform MocapLiveCore::MakeTransform(float* pTransform)
 {
     FQuat rotation; 
@@ -157,5 +146,28 @@ FTransform MocapLiveCore::MakeTransform(float* pTransform)
         translation, scale3D);
 
     return transform;
+}
+
+void MocapLiveCore::UpdateSkelTransforms(TArray<FTransform>& SkelTransforms)
+{
+
+    float* p;
+    FTransform transform;
+    FQuat rotation;
+
+    for (int i = 0; i < mNumBones; i++) {
+
+        p = MocapGetSkelTransform(i);
+        transform = MakeTransform(p);
+
+        // Convert quaternion from Mediapipe to Unreal coordinates
+        rotation = transform.GetRotation();
+        ConvertQuatFromMpToUnreal(rotation, rotation);
+        transform.SetRotation(rotation);
+
+        SkelTransforms[i] = transform;
+
+    }
+
 }
 

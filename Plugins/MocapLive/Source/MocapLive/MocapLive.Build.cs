@@ -64,10 +64,16 @@ public class MocapLive : ModuleRules
 
 		// Add the import library
 		PublicAdditionalLibraries.Add(Path.Combine(LibRootDirectory, "lib/Win64/LibMocap.lib"));
+		//PublicAdditionalLibraries.Add(Path.Combine(LibRootDirectory, "lib/Win64/LibFacialExpression.lib"));
+		//PublicAdditionalLibraries.Add(Path.Combine(LibRootDirectory, "lib/Win64/libmocap_mp.lib"));
 		// Delay-load the DLL, so we can load it from the right place first
 		PublicDelayLoadDLLs.Add("LibMocap.dll");
+		PublicDelayLoadDLLs.Add("LibFacialExpression.dll");
+		PublicDelayLoadDLLs.Add("libmocap_mp.dll");
 		// Ensure that the DLL is staged along with the executable
 		RuntimeDependencies.Add(Path.Combine(LibRootDirectory, "lib/Win64/LibMocap.dll"));
+		RuntimeDependencies.Add(Path.Combine(LibRootDirectory, "lib/Win64/LibFacialExpression.dll"));
+		RuntimeDependencies.Add(Path.Combine(LibRootDirectory, "lib/Win64/libmocap_mp.dll"));
 
 	}
 }

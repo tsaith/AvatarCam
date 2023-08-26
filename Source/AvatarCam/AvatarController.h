@@ -23,10 +23,11 @@ public:
 	UFUNCTION(BlueprintPure, Category = "AvatarController")
 		bool IsDataReady();
 
-	UFUNCTION(BlueprintCallable, Category = "AvatarController")
-		void SetMocapData(FTransform HeadTransform, 
+    UFUNCTION(BlueprintCallable, Category = "AvatarController")
+        void SetMocapData(
             TArray<float> Blendshapes,
-            TArray<FVector> Bones, TArray<FQuat> Quats);
+            FTransform HeadTransform,
+            TArray<FTransform> SkelTransforms);
 
     UFUNCTION(BlueprintPure, Category = "AvatarController")
         void GetHeadTransform(FTransform& HeadTransform);
@@ -38,10 +39,15 @@ public:
         void GetBlendshapes(TArray<float>& Blendshapes);
 
     UFUNCTION(BlueprintPure, Category = "AvatarController")
+        void GetSkelTransforms(TArray<FTransform>& SkelTransforms);
+
+    /*
+    UFUNCTION(BlueprintPure, Category = "AvatarController")
         void GetBones(TArray<FVector>& Bones);
 
     UFUNCTION(BlueprintPure, Category = "AvatarController")
         void GetQuats(TArray<FQuat>& Quats);
+    */
 
     // Bone indexes
 	UFUNCTION(BlueprintPure, Category = "AvatarController")
@@ -262,9 +268,10 @@ private:
     FTransform mHeadTransform;
 	TArray<FString> mBlendshapeNames;
 	TArray<float> mBlendshapes;
+    TArray<FTransform> mSkelTransforms;
 
-	TArray<FVector> mBones;
-	TArray<FQuat> mQuats;
+	//TArray<FVector> mBones;
+	//TArray<FQuat> mQuats;
 
     const int mIPelvis = 0;
     const int mISpine01 = 1;

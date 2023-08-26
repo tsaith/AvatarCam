@@ -33,8 +33,6 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	void Process();
-	//void EstimateSkeleton();
-	//void UpdateLocomotion();
 	void Diagnostic();
 	
 	void ConvertTextureToCvMat(UTexture2D* &Texture, cv::Mat &M);
@@ -70,19 +68,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "MocapEngine")
 		void SetImageTexture(UTexture2D* ImageTexture);
 
-	//UFUNCTION(BlueprintPure, Category = "MocapEngine")
-	    MocapData GetMocapData();
-
-	UFUNCTION(BlueprintCallable, Category = "MocapEngine")
+    UFUNCTION(BlueprintCallable, Category = "MocapEngine")
 		void Calibrate();
 
-	UFUNCTION(BlueprintCallable, Category = "MocapEngine")
-		void SetEngineName(FString EngineName);
-
-	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		FString GetEngineName();
-
-	UFUNCTION(BlueprintPure, Category = "MocapEngine")
+    UFUNCTION(BlueprintPure, Category = "MocapEngine")
 		bool IsFaceDetected();
 
 	UFUNCTION(BlueprintPure, Category = "MocapEngine")
@@ -92,11 +81,7 @@ public:
 		FTransform GetHeadTransform();
 
 	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		FTransform GetSkelTransform(int Index);
-
-	UFUNCTION(BlueprintPure, Category = "MocapEngine")
-		void GetMocapData(TArray<float>& Blendshapes,
-			TArray<FVector>& Bones, TArray<FQuat>& Quats);
+		TArray<FTransform> GetSkelTransforms();
 
 	UFUNCTION(BlueprintPure, Category = "MocapEngine")
 		void GetBones(TArray<FVector>& Bones);
@@ -131,16 +116,8 @@ private:
 	const int mWidthTarget = 640;
 	const int mHeightTarget = 480;
 
-
-
 	// Mocap Live
 	MocapLiveCore mMocapLive;
-
-	// Mocap of Mediapipe
-	//MocapMpProxy mMocap = MocapMpProxy();
-
-	bool mCanLoadMocapLibrary = false;
-	FString mEngineName = "unreal";
 	bool mIsCalibrated = false;
 
 	// Head
@@ -148,6 +125,7 @@ private:
 
 	// Skeleton
 	int mNumBones = -1;
+	TArray<FTransform> mSkelTransforms;
 	TArray<FVector> mBones;
 	TArray<FQuat> mQuats;
 
