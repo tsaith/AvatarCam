@@ -19,5 +19,5 @@ private:
 
 	void* LibMocapHandle;
 	void* LibFacialExpressionHandle;
-	void* LibMocapMpHandle;
+	void* LibMediapipeHandle;
 };

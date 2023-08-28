@@ -16,22 +16,19 @@ void FMocapLiveModule::StartupModule()
 	FString BaseDir = IPluginManager::Get().FindPlugin("MocapLive")->GetBaseDir();
 
 	// Add on the relative location of the third party dll and load it
-	FString LibFacialExpressionPath;
-	FString LibMocapMpPath;
-	FString LibMocapPath;
 
 	// The loading sequence is important
 	LibFacialExpressionHandle = LoadLibrary(*BaseDir, TEXT("Binaries/ThirdParty/MocapLive/lib/Win64/LibFacialExpression.dll"));
-	LibMocapMpHandle = LoadLibrary(*BaseDir, TEXT("Binaries/ThirdParty/MocapLive/lib/Win64/libmocap_mp.dll"));
+	LibMediapipeHandle = LoadLibrary(*BaseDir, TEXT("Binaries/ThirdParty/MocapLive/lib/Win64/libmediapipe.dll"));
 	LibMocapHandle = LoadLibrary(*BaseDir, TEXT("Binaries/ThirdParty/MocapLive/lib/Win64/LibMocap.dll"));
 
 	if (!LibFacialExpressionHandle)
 	{
 		FMessageDialog::Open(EAppMsgType::Ok, LOCTEXT("ThirdPartyLibraryError", "Failed to load MocapLive: LibFacialExpressionMocap.dll."));
 	}
-	if (!LibMocapMpHandle)
+	if (!LibMediapipeHandle)
 	{
-		FMessageDialog::Open(EAppMsgType::Ok, LOCTEXT("ThirdPartyLibraryError", "Failed to load MocapLive: libmocap_mp.dll."));
+		FMessageDialog::Open(EAppMsgType::Ok, LOCTEXT("ThirdPartyLibraryError", "Failed to load MocapLive: libmediapipe.dll."));
 	}
 	if (!LibMocapHandle)
 	{
@@ -44,9 +41,9 @@ void FMocapLiveModule::ShutdownModule()
 {
 	// This function may be called during shutdown to clean up your module.  For modules that support dynamic reloading,
 	// we call this function before unloading the module.
-
+ 
 	// Free the dll handle
-	FreeLibrary(LibMocapMpHandle);
+	FreeLibrary(LibMediapipeHandle);
 	FreeLibrary(LibFacialExpressionHandle);
 	FreeLibrary(LibMocapHandle);
 
@@ -62,8 +59,10 @@ void* FMocapLiveModule::LoadLibrary(FString PluginDir, FString RelativePath)
 
 void FMocapLiveModule::FreeLibrary(void* Handle)
 {
-	FPlatformProcess::FreeDllHandle(Handle);
-	Handle = nullptr;
+	if (Handle) {
+	    FPlatformProcess::FreeDllHandle(Handle);
+	    Handle = nullptr;
+	}
 }
 
 
