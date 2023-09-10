@@ -20,4 +20,6 @@ private:
 	void* LibMocapHandle;
 	void* LibFacialExpressionHandle;
 	void* LibMediapipeHandle;
+	void* LibOnnxruntimeHandle;
+	void* LibDirectMLHandle;
 };

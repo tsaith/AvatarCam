@@ -31,7 +31,7 @@ void MocapLiveCore::Detect(cv::Mat& Image)
 {
     float* p;
 
-    MocapDetect(Image);
+    MocapDetect(Image); 
 
     mIsFaceDetected = MocapIsFaceDetected();
     

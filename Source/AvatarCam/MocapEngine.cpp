@@ -75,7 +75,7 @@ void AMocapEngine::Process() {
 	mMocapLive.Detect(image);
 
 	// Head
-	mHeadTransform = mMocapLive.GetHeadTransform();
+    mHeadTransform = mMocapLive.GetHeadTransform();
 
 	msg = FString::Printf(TEXT("mIsFace|Detected: %d"), IsFaceDetected());
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, *msg);

@@ -12,6 +12,8 @@ Shipping/*
 Plugins/*/Binaries/Win64/*
 Plugins/*/Intermediate/*
 Plugins/*/ThirdParty/*
+Plugins/*/Binaries/ThirdParty/*
+#Plugins/MocapLive/Binaries/ThirdParty/MocapLive/lib/*
 
 # Character models
 Content/Characters/*
