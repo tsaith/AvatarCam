@@ -21,7 +21,6 @@ void FMocapLiveModule::StartupModule()
 	LibDirectMLHandle = LoadLibrary(*BaseDir, TEXT("Binaries/ThirdParty/MocapLive/lib/Win64/DirectML.dll"));
     LibOnnxruntimeHandle = LoadLibrary(*BaseDir, TEXT("Binaries/ThirdParty/MocapLive/lib/Win64/onnxruntime.dll"));
 	LibMediapipeHandle = LoadLibrary(*BaseDir, TEXT("Binaries/ThirdParty/MocapLive/lib/Win64/libmediapipe.dll"));
-	LibFacialExpressionHandle = LoadLibrary(*BaseDir, TEXT("Binaries/ThirdParty/MocapLive/lib/Win64/LibFacialExpression.dll"));
 	LibMocapHandle = LoadLibrary(*BaseDir, TEXT("Binaries/ThirdParty/MocapLive/lib/Win64/LibMocap.dll"));
 
 	if (!LibDirectMLHandle)
@@ -35,10 +34,6 @@ void FMocapLiveModule::StartupModule()
 	if (!LibMediapipeHandle)
 	{
 		FMessageDialog::Open(EAppMsgType::Ok, LOCTEXT("ThirdPartyLibraryError", "Failed to load MocapLive: libmediapipe.dll."));
-	}
-	if (!LibFacialExpressionHandle)
-	{
-		FMessageDialog::Open(EAppMsgType::Ok, LOCTEXT("ThirdPartyLibraryError", "Failed to load MocapLive: LibFacialExpressionMocap.dll."));
 	}
 	if (!LibMocapHandle)
 	{
@@ -56,7 +51,6 @@ void FMocapLiveModule::ShutdownModule()
 	FreeLibrary(LibDirectMLHandle);
 	FreeLibrary(LibOnnxruntimeHandle);
 	FreeLibrary(LibMediapipeHandle);
-	FreeLibrary(LibFacialExpressionHandle);
 	FreeLibrary(LibMocapHandle);
 
 }
