@@ -76,9 +76,9 @@ void AMocapEngine::Process() {
 
 	// Head
     mHeadTransform = mMocapLive.GetHeadTransform();
-
-	msg = FString::Printf(TEXT("mIsFace|Detected: %d"), IsFaceDetected());
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, *msg);
+	
+	//msg = FString::Printf(TEXT("mIsFace|Detected: %d"), IsFaceDetected());
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, *msg);
 
 	// Update skeleton transforms
 	mSkelTransforms = mMocapLive.GetSkelTransforms();

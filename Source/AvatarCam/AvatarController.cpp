@@ -318,7 +318,7 @@ int AAvatarController::GetIRing04R() {
 int AAvatarController::GetIPinky01R() {
 	return mIPinky01R;
 }
-
+ 
 int AAvatarController::GetIPinky02R() {
 	return mIPinky02R;
 }
