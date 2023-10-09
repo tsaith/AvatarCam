@@ -20,7 +20,7 @@ void FMocapLiveModule::StartupModule()
 	// The loading sequence is important
 	LibDirectMLHandle = LoadLibrary(*BaseDir, TEXT("Binaries/ThirdParty/MocapLive/lib/Win64/DirectML.dll"));
     LibOnnxruntimeHandle = LoadLibrary(*BaseDir, TEXT("Binaries/ThirdParty/MocapLive/lib/Win64/onnxruntime.dll"));
-	LibMediapipeHandle = LoadLibrary(*BaseDir, TEXT("Binaries/ThirdParty/MocapLive/lib/Win64/libmediapipe.dll"));
+	LibMediapipeHandle = LoadLibrary(*BaseDir, TEXT("Binaries/ThirdParty/MocapLive/lib/Win64/LibMediapipe.dll"));
 	LibMocapHandle = LoadLibrary(*BaseDir, TEXT("Binaries/ThirdParty/MocapLive/lib/Win64/LibMocap.dll"));
 
 	if (!LibDirectMLHandle)
@@ -31,13 +31,13 @@ void FMocapLiveModule::StartupModule()
 	{
 		FMessageDialog::Open(EAppMsgType::Ok, LOCTEXT("ThirdPartyLibraryError", "Failed to load MocapLive: onnxruntime.dll."));
 	}
-	if (!LibMediapipeHandle)
-	{
-		FMessageDialog::Open(EAppMsgType::Ok, LOCTEXT("ThirdPartyLibraryError", "Failed to load MocapLive: libmediapipe.dll."));
-	}
 	if (!LibMocapHandle)
 	{
 		FMessageDialog::Open(EAppMsgType::Ok, LOCTEXT("ThirdPartyLibraryError", "Failed to load MocapLive: LibMocap.dll."));
+	}
+	if (!LibMediapipeHandle)
+	{
+		FMessageDialog::Open(EAppMsgType::Ok, LOCTEXT("ThirdPartyLibraryError", "Failed to load MocapLive: LibMediapipe.dll."));
 	}
 
 }
@@ -50,8 +50,8 @@ void FMocapLiveModule::ShutdownModule()
 	// Free the dll handle
 	FreeLibrary(LibDirectMLHandle);
 	FreeLibrary(LibOnnxruntimeHandle);
-	FreeLibrary(LibMediapipeHandle);
 	FreeLibrary(LibMocapHandle);
+	FreeLibrary(LibMediapipeHandle);
 
 }
 
