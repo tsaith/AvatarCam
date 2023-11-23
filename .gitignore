@@ -17,6 +17,7 @@ Plugins/*/Binaries/ThirdParty/*
 
 # Character models
 Content/Characters/*
+Content/MetaHumans/*
 #Content/Characters/*/Assets/*
 
 # Weights
