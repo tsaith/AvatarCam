@@ -51,20 +51,11 @@
 		},
 		{
 			"Name": "MetaHuman",
-			"Enabled": true
+			"Enabled": false
 		},
 		{
 			"Name": "LiveLink",
 			"Enabled": false
-		},
-		{
-			"Name": "NNE",
-			"Enabled": true,
-			"SupportedTargetPlatforms": [
-				"Win64",
-				"Linux",
-				"Mac"
-			]
 		},
 		{
 			"Name": "LiveLinkControlRig",
