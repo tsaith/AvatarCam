@@ -100,7 +100,7 @@ void AMocapEngine::Diagnostic() {
 	ConvertCvMatToTexture(mImageDiag, mDiagTexture);
 
 }
-
+ 
 void AMocapEngine::ConvertTextureToCvMat(UTexture2D* &Texture, cv::Mat &Mat) {
 
 	if (Texture == nullptr) {

@@ -373,7 +373,7 @@ void AAvatarController::InitBlendshapeNames() {
 	mBlendshapeNames[23] = "noseSneerRight";
 	mBlendshapeNames[24] = "jawOpen";
 	mBlendshapeNames[25] = "jawForward";
-	mBlendshapeNames[26] = "jawLeft";
+	mBlendshapeNames[26] = "jawLeft"; 
 	mBlendshapeNames[27] = "jawRight";
 	mBlendshapeNames[28] = "mouthFunnel";
 	mBlendshapeNames[29] = "mouthPucker";

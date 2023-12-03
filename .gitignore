@@ -9,6 +9,7 @@ _build/
 Shipping/*
 
 # Plugins
+Plugins/*
 Plugins/*/Binaries/Win64/*
 Plugins/*/Intermediate/*
 Plugins/*/ThirdParty/*
@@ -18,7 +19,9 @@ Plugins/*/Binaries/ThirdParty/*
 # Character models
 Content/Characters/*
 Content/MetaHumans/*
-#Content/Characters/*/Assets/*
+Content/KitsuneYuna/*
+Content/QueenMarika/*
+
 
 # Weights
 *.weights
