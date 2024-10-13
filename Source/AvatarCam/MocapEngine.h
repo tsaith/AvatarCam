@@ -8,8 +8,7 @@
 #include "PostOpenCVHeaders.h"
 
 #include "MocapData.h"
-#include "MocapLiveCore.h"
-//#include "MocapMpProxy.h"
+//#include "MocapLiveCore.h"
 
 #include "Math/UnrealMathUtility.h"
 
@@ -117,7 +116,7 @@ private:
 	const int mHeightTarget = 480;
 
 	// Mocap Live
-	MocapLiveCore mMocapLive;
+	//MocapLiveCore mMocapLive;
 	bool mIsCalibrated = false;
 
 	// Head

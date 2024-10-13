@@ -21,7 +21,7 @@ public class AvatarCam : ModuleRules
 			"HeadMountedDisplay", "EnhancedInput",
 			"ImageWrapper", "RenderCore",
 			"OpenCV", "OpenCVHelper",
-			"VRM4U", "MocapLive"
+			"VRM4U" // , "MocapLive"
 		});
 
 	}

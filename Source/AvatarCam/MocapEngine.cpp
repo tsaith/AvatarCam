@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "MocapEngine.h"
+#include "MocapEngine.h" 
 
 // Sets default values
 AMocapEngine::AMocapEngine()
@@ -29,10 +29,10 @@ void AMocapEngine::BeginPlay()
 	mData.Init(FColor(0, 0, 0, 255), ImageWidth*ImageHeight);
 
 	// Mocap Live
-	mMocapLive.Init(ImageWidth, ImageHeight);
+	//mMocapLive.Init(ImageWidth, ImageHeight);
 
 	// Number of bones
-	mNumBones = mMocapLive.GetNumBones();
+	//mNumBones = mMocapLive.GetNumBones();
 
 	mSkelTransforms.SetNum(mNumBones);
 	mBones.SetNum(mNumBones);
@@ -72,20 +72,20 @@ void AMocapEngine::Process() {
     cv::resize(image, image, cv::Size(mWidthTarget, mHeightTarget));
 
     // Mocap Live
-	mMocapLive.Detect(image);
+	//mMocapLive.Detect(image);
 
 	// Head
-    mHeadTransform = mMocapLive.GetHeadTransform();
+    //mHeadTransform = mMocapLive.GetHeadTransform();
 	
 	//msg = FString::Printf(TEXT("mIsFace|Detected: %d"), IsFaceDetected());
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, *msg);
 
 	// Update skeleton transforms
-	mSkelTransforms = mMocapLive.GetSkelTransforms();
+	//mSkelTransforms = mMocapLive.GetSkelTransforms();
 
 	// Update bones and quats 
-	mQuats = mMocapLive.GetQuats();
-	mBones = mMocapLive.GetBones();
+	//mQuats = mMocapLive.GetQuats();
+	//mBones = mMocapLive.GetBones();
 
 	// Perform diagnostics 
 	Diagnostic();
@@ -161,11 +161,14 @@ void AMocapEngine::Calibrate() {
 }
 
 bool AMocapEngine::IsFaceDetected() {
-	return mMocapLive.IsFaceDetected();
+	return true;
+	//return mMocapLive.IsFaceDetected();
 }
 
 TArray<float> AMocapEngine::GetBlendshapes() {
-	return mMocapLive.GetBlendshapes();
+	TArray<float> tmp;
+	return tmp;
+	//return mMocapLive.GetBlendshapes();
 }
 
 FTransform AMocapEngine::GetHeadTransform() {

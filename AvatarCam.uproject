@@ -34,10 +34,6 @@
 			"Enabled": false
 		},
 		{
-			"Name": "MocapMp",
-			"Enabled": false
-		},
-		{
 			"Name": "VRM4U",
 			"Enabled": true
 		},
@@ -73,6 +69,10 @@
 		{
 			"Name": "HairStrands",
 			"Enabled": true
+		},
+		{
+			"Name": "MocapLive",
+			"Enabled": false
 		}
 	],
 	"TargetPlatforms": [

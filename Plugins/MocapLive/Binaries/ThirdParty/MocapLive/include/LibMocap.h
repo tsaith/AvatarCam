@@ -1,6 +1,6 @@
 #pragma once
 
-#include "opencv2/opencv.hpp"
+#include "opencv2/opencv.hpp"  
 
 #ifdef LIBMOCAP_EXPORTS
     #define LIBMOCAP_API __declspec(dllexport)
